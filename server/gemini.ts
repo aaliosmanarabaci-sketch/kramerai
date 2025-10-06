@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import type { GenerateIdeasRequest, Idea } from "@shared/schema";
+import { storage } from "./storage";
 
 // DON'T DELETE THIS COMMENT
 // Follow these instructions when using this blueprint:
@@ -8,20 +9,65 @@ import type { GenerateIdeasRequest, Idea } from "@shared/schema";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
 
+const PROMPT_TEMPLATES = [
+  {
+    system: `Sen Cosmo Kramer gibi yaratıcı ve çılgın fikirlere sahip bir girişimcisin. Seinfeld dizisindeki Kramer karakterinin ruhunu taşıyan, özgün ve ilginç iş fikirleri üretiyorsun. Fikirler sıradışı olmalı ama aynı zamanda gerçekleştirilebilir olmalı.`,
+    intro: `Bana {count} yaratıcı girişim fikri üret. Her fikir şu özelliklere sahip olmalı:\n- Kramer'ın ruhunu yansıtan özgün ve yaratıcı\n- Kısa ama çarpıcı bir başlık\n- 2-3 cümlelik açıklama\n- Özgünlük puanı (1-5 arası)`
+  },
+  {
+    system: `Sen iş dünyasının yaratıcı dehası, bir fikir fabrikasısın. Kramer'ın spontane ve sıra dışı düşünce tarzını modern girişimcilik anlayışıyla harmanlayarak benzersiz iş modelleri öneriyorsun.`,
+    intro: `Şu anda {count} adet hiç duyulmamış, yenilikçi girişim konsepti istiyorum. Her fikir:\n- Piyasada benzeri olmayan\n- Uygulanabilir ve somut\n- Dikkat çekici bir isimle başlayan\n- Net bir değer önerisi içeren`
+  },
+  {
+    system: `Kramer'ın ruhuyla hareket eden bir vizyon mimarısın. Geleneksel kalıpları kıran, insanları şaşırtan ama aynı zamanda mantıklı gelen iş fikirleri yaratıyorsun.`,
+    intro: `Önüme {count} tane çılgın ama parlak iş fikri koy. Her biri:\n- Sıra dışı ve dikkat çekici\n- Pratik uygulama potansiyeli olan\n- Kısa ve akılda kalıcı başlıklı\n- Gerçekçi bir vizyona sahip`
+  },
+  {
+    system: `Girişim dünyasının maveriği, kalıpların dışında düşünen bir stratejistsin. Kramer'ın cesur ve özgün bakış açısıyla pazar fırsatlarını keşfedip yenilikçi çözümler sunuyorsun.`,
+    intro: `Bana {count} devrim niteliğinde iş fikri sun. Her konsept:\n- Pazar boşluğunu dolduran\n- Yaratıcı ve cesur\n- Akılda kalıcı bir adla tanımlanan\n- Somut uygulama adımları olan`
+  }
+];
+
+function getCreativityParams(level: string = "balanced") {
+  switch(level) {
+    case "creative":
+      return { temperature: 1.2, topP: 0.95 };
+    case "wild":
+      return { temperature: 1.5, topP: 0.98 };
+    default:
+      return { temperature: 0.9, topP: 0.9 };
+  }
+}
+
+function createFilterKey(request: GenerateIdeasRequest): string {
+  const parts = [
+    request.industry || "any",
+    request.budget || "any",
+    request.complexity || "any",
+    request.audience || "any"
+  ];
+  return parts.join("|");
+}
+
 export async function generateIdeas(request: GenerateIdeasRequest): Promise<Idea[]> {
   if (!process.env.GEMINI_API_KEY) {
     throw new Error("GEMINI_API_KEY environment variable is not set");
   }
 
-  const { industry, budget, complexity, audience } = request;
+  const { industry, budget, complexity, audience, ideaCount = 6, creativityLevel = "balanced" } = request;
 
-  const systemPrompt = `Sen Cosmo Kramer gibi yaratıcı ve çılgın fikirlere sahip bir girişimcisin. Seinfeld dizisindeki Kramer karakterinin ruhunu taşıyan, özgün ve ilginç iş fikirleri üretiyorsun. Fikirler sıradışı olmalı ama aynı zamanda gerçekleştirilebilir olmalı.`;
+  const filterKey = createFilterKey(request);
+  const recentIdeas = await storage.getRecentIdeas(filterKey);
+  
+  const templateIndex = Math.floor(Math.random() * PROMPT_TEMPLATES.length);
+  const selectedTemplate = PROMPT_TEMPLATES[templateIndex];
+  const creativityParams = getCreativityParams(creativityLevel);
+  
+  const timestamp = Date.now();
+  const randomSeed = Math.floor(Math.random() * 1000000);
 
-  let userPrompt = `Bana 6 yaratıcı girişim fikri üret. Her fikir şu özelliklere sahip olmalı:
-- Kramer'ın ruhunu yansıtan özgün ve yaratıcı
-- Kısa ama çarpıcı bir başlık
-- 2-3 cümlelik açıklama
-- Özgünlük puanı (1-5 arası)`;
+  const systemPrompt = selectedTemplate.system;
+  let userPrompt = selectedTemplate.intro.replace("{count}", ideaCount.toString());
 
   if (industry) {
     userPrompt += `\n- Sektör odağı: ${industry}`;
@@ -36,6 +82,11 @@ export async function generateIdeas(request: GenerateIdeasRequest): Promise<Idea
     userPrompt += `\n- Hedef kitle: ${audience}`;
   }
 
+  if (recentIdeas.length > 0) {
+    userPrompt += `\n\nÖNEMLİ: Şu başlıklara benzer fikirler ÜRETME (farklı olmalı):\n${recentIdeas.slice(-10).map(t => `- ${t}`).join('\n')}`;
+  }
+
+  userPrompt += `\n\nYaratıcılık Seed: ${randomSeed} | Zaman: ${timestamp}`;
   userPrompt += `\n\nJSON formatında şu yapıda cevap ver:
 {
   "ideas": [
@@ -78,6 +129,8 @@ export async function generateIdeas(request: GenerateIdeasRequest): Promise<Idea
       config: {
         systemInstruction: systemPrompt,
         responseMimeType: "application/json",
+        temperature: creativityParams.temperature,
+        topP: creativityParams.topP,
         responseSchema: {
           type: "object",
           properties: {
@@ -143,7 +196,7 @@ export async function generateIdeas(request: GenerateIdeasRequest): Promise<Idea
       throw new Error("Invalid response format from Gemini");
     }
 
-    return result.ideas.map((idea: any) => ({
+    const ideas = result.ideas.map((idea: any) => ({
       title: idea.title || "Başlıksız Fikir",
       description: idea.description || "Açıklama yok",
       category: idea.category || industry || "Genel",
@@ -157,6 +210,11 @@ export async function generateIdeas(request: GenerateIdeasRequest): Promise<Idea
       potentialRevenue: idea.potentialRevenue || "Belirsiz",
       targetMarketSize: idea.targetMarketSize || "Belirsiz",
     }));
+
+    const ideaTitles = ideas.map((idea: Idea) => idea.title);
+    await storage.addRecentIdeas(filterKey, ideaTitles);
+
+    return ideas;
   } catch (error) {
     console.error("Gemini API error:", error);
     throw new Error("Fikirler üretilirken bir hata oluştu. Lütfen tekrar deneyin.");
