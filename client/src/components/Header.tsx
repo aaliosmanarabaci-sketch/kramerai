@@ -5,7 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { useSavedIdeas } from "@/contexts/SavedIdeasContext";
-import kramerLogo from "@assets/kramer_1759751289249.png";
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -54,11 +53,8 @@ export function Header() {
           className="flex items-center gap-3 hover-elevate rounded-lg px-3 py-2 transition-all"
           data-testid="button-logo"
         >
-          <div className="relative">
-            <div className="absolute inset-0 bg-primary/20 blur-lg rounded-full" />
-            <div className="relative bg-gradient-to-br from-primary to-destructive p-1 rounded-lg">
-              <img src={kramerLogo} alt="Kramer" className="h-8 w-8 object-cover rounded-md" />
-            </div>
+          <div className="relative flex-shrink-0">
+            <img src="/kramer-logo.png" alt="Kramer" className="h-10 w-10 rounded-lg object-cover ring-2 ring-primary/30" />
           </div>
           <div className="flex flex-col items-start">
             <span className="font-serif text-lg font-bold leading-none">KramerAI</span>
