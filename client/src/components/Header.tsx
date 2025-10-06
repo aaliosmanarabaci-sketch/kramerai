@@ -47,10 +47,10 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-background/90 backdrop-blur-xl border-b shadow-lg">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+      <div className="container mx-auto px-4 h-16 flex items-center justify-between relative">
         <button 
           onClick={scrollToTop}
-          className="flex items-center gap-2 hover-elevate rounded-lg px-3 py-2 transition-all mr-4"
+          className="flex items-center gap-2 hover-elevate rounded-lg px-3 py-2 transition-all"
           data-testid="button-logo"
         >
           <div className="relative flex-shrink-0">
@@ -62,7 +62,7 @@ export function Header() {
           </div>
         </button>
 
-        <nav className="hidden md:flex items-center gap-1 ml-auto mr-2">
+        <nav className="hidden lg:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
           {navItems.map((item) => {
             const Icon = item.icon;
             return (
@@ -92,25 +92,25 @@ export function Header() {
               </Badge>
             )}
           </Button>
-        </nav>
-        
-        <div className="flex items-center gap-3">
           <Button
             variant="default"
             onClick={() => scrollToSection("generator")}
-            className="hidden sm:flex shadow-md"
+            className="shadow-md"
             data-testid="button-generate-cta"
           >
             <Lightbulb className="h-4 w-4 mr-2" />
             Fikir Üret
           </Button>
+        </nav>
+        
+        <div className="flex items-center gap-3">
           <ThemeToggle />
           
           <Button
             size="icon"
             variant="ghost"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden hover-elevate"
+            className="lg:hidden hover-elevate"
             data-testid="button-mobile-menu"
           >
             {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -119,7 +119,7 @@ export function Header() {
       </div>
 
       {isMobileMenuOpen && (
-        <div className="md:hidden border-t bg-background/95 backdrop-blur-xl">
+        <div className="lg:hidden border-t bg-background/95 backdrop-blur-xl">
           <nav className="container mx-auto px-4 py-4 flex flex-col gap-2">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -149,6 +149,15 @@ export function Header() {
                   {savedIdeas.length}
                 </Badge>
               )}
+            </Button>
+            <Button
+              variant="default"
+              onClick={() => scrollToSection("generator")}
+              className="justify-start gap-3 h-12 shadow-md"
+              data-testid="mobile-button-generate-cta"
+            >
+              <Lightbulb className="h-5 w-5" />
+              <span className="font-medium text-base">Fikir Üret</span>
             </Button>
           </nav>
         </div>
