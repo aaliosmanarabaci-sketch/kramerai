@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Sparkles, Loader2 } from "lucide-react";
+import { Sparkles, Loader2, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FilterChip } from "./FilterChip";
 import { IdeaCard, type IdeaCardProps } from "./IdeaCard";
@@ -270,6 +270,29 @@ export function IdeaGenerator() {
               {ideas.map((idea, index) => (
                 <IdeaCard key={index} {...idea} />
               ))}
+            </div>
+
+            <div className="flex justify-center pt-8">
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={generateIdeas}
+                disabled={isLoading}
+                className="text-base px-8 shadow-md hover:shadow-lg transition-all backdrop-blur-sm"
+                data-testid="button-regenerate-ideas"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                    Yeni Fikirler Üretiliyor...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="h-5 w-5 mr-2" />
+                    Yeni Fikirler Üret
+                  </>
+                )}
+              </Button>
             </div>
           </div>
         )}
