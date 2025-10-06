@@ -33,6 +33,16 @@ export const ideaSchema = z.object({
   budget: z.string(),
   complexity: z.string(),
   uniqueness: z.number().min(1).max(5),
+  roadmap: z.array(z.object({
+    phase: z.string(),
+    duration: z.string(),
+    tasks: z.array(z.string()),
+  })),
+  pros: z.array(z.string()),
+  cons: z.array(z.string()),
+  requiredSkills: z.array(z.string()),
+  potentialRevenue: z.string(),
+  targetMarketSize: z.string(),
 });
 
 export type Idea = z.infer<typeof ideaSchema>;

@@ -41,11 +41,33 @@ export async function generateIdeas(request: GenerateIdeasRequest): Promise<Idea
   "ideas": [
     {
       "title": "Fikir Başlığı",
-      "description": "Kısa açıklama",
+      "description": "2-3 cümlelik kısa açıklama",
       "category": "Sektör adı",
       "budget": "Bütçe seviyesi",
       "complexity": "Karmaşıklık seviyesi",
-      "uniqueness": 5
+      "uniqueness": 5,
+      "roadmap": [
+        {
+          "phase": "Faz 1: Hazırlık",
+          "duration": "1-2 hafta",
+          "tasks": ["Görev 1", "Görev 2", "Görev 3"]
+        },
+        {
+          "phase": "Faz 2: Geliştirme",
+          "duration": "2-4 hafta",
+          "tasks": ["Görev 1", "Görev 2"]
+        },
+        {
+          "phase": "Faz 3: Lansман",
+          "duration": "1 hafta",
+          "tasks": ["Görev 1", "Görev 2"]
+        }
+      ],
+      "pros": ["Artı 1", "Artı 2", "Artı 3"],
+      "cons": ["Eksi 1", "Eksi 2"],
+      "requiredSkills": ["Beceri 1", "Beceri 2", "Beceri 3"],
+      "potentialRevenue": "Aylık tahmini gelir",
+      "targetMarketSize": "Hedef pazar büyüklüğü tahmini"
     }
   ]
 }`;
@@ -70,8 +92,37 @@ export async function generateIdeas(request: GenerateIdeasRequest): Promise<Idea
                   budget: { type: "string" },
                   complexity: { type: "string" },
                   uniqueness: { type: "number" },
+                  roadmap: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        phase: { type: "string" },
+                        duration: { type: "string" },
+                        tasks: {
+                          type: "array",
+                          items: { type: "string" },
+                        },
+                      },
+                      required: ["phase", "duration", "tasks"],
+                    },
+                  },
+                  pros: {
+                    type: "array",
+                    items: { type: "string" },
+                  },
+                  cons: {
+                    type: "array",
+                    items: { type: "string" },
+                  },
+                  requiredSkills: {
+                    type: "array",
+                    items: { type: "string" },
+                  },
+                  potentialRevenue: { type: "string" },
+                  targetMarketSize: { type: "string" },
                 },
-                required: ["title", "description", "category", "budget", "complexity", "uniqueness"],
+                required: ["title", "description", "category", "budget", "complexity", "uniqueness", "roadmap", "pros", "cons", "requiredSkills", "potentialRevenue", "targetMarketSize"],
               },
             },
           },
@@ -99,6 +150,12 @@ export async function generateIdeas(request: GenerateIdeasRequest): Promise<Idea
       budget: idea.budget || budget || "Orta Bütçe",
       complexity: idea.complexity || complexity || "Orta",
       uniqueness: Math.max(1, Math.min(5, idea.uniqueness || 3)),
+      roadmap: idea.roadmap || [],
+      pros: idea.pros || [],
+      cons: idea.cons || [],
+      requiredSkills: idea.requiredSkills || [],
+      potentialRevenue: idea.potentialRevenue || "Belirsiz",
+      targetMarketSize: idea.targetMarketSize || "Belirsiz",
     }));
   } catch (error) {
     console.error("Gemini API error:", error);
