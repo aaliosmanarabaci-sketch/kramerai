@@ -22,9 +22,14 @@ Preferred communication style: Simple, everyday language.
 **UI Component System:**
 - Shadcn/ui component library (Radix UI primitives with custom styling)
 - Custom theme system supporting light/dark modes
-- Design philosophy balances 90s Seinfeld nostalgia with modern UX patterns
+- Design philosophy: Modern, professional interface with calming blue tones
 - Typography: Space Grotesk (headlines), Inter (body), Righteous (accent/playful elements)
-- Color palette: Brand orange (Kramer's energy), deep burgundy (Seinfeld warmth), with cream/dark backgrounds
+- Color palette: Blue-cyan gradient system
+  - C5EFF8 (192° 74% 87%): Light background
+  - AAE5F6 (194° 80% 82%): Card surfaces
+  - 5CBED7 (192° 61% 60%): Primary actions/buttons
+  - 285F88 (206° 55% 35%): Dark accents
+  - 192123 (192° 17% 12%): Dark mode background
 
 **State Management:**
 - React Query for server state (API responses, caching)
@@ -172,3 +177,5 @@ Preferred communication style: Simple, everyday language.
 - Created dedicated saved ideas page with empty states
 - Implemented social sharing features (WhatsApp, Telegram, Email, Copy to Clipboard)
 - Added native Web Share API support for mobile devices
+- Updated color palette to blue-cyan gradient system (C5EFF8, AAE5F6, 5CBED7, 285F88, 192123)
+- Improved accessibility with proper contrast ratios in both light and dark modes
