@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Sparkles, Loader2, RefreshCw } from "lucide-react";
+import { Sparkles, Loader2, RefreshCw, Dices } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FilterChip } from "./FilterChip";
 import { IdeaCard, type IdeaCardProps } from "./IdeaCard";
@@ -72,6 +72,64 @@ export function IdeaGenerator() {
     setSelectedComplexity(null);
     setSelectedAudience(null);
     console.log("Filters cleared");
+  };
+
+  const generateRandomIdea = async () => {
+    setIsLoading(true);
+    
+    try {
+      const response = await fetch("/api/generate-ideas", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          industry: null,
+          budget: null,
+          complexity: null,
+          audience: null,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Fikirler üretilirken bir hata oluştu");
+      }
+
+      const data = await response.json();
+      
+      if (data.error) {
+        toast({
+          title: "Hata",
+          description: data.error,
+          variant: "destructive",
+        });
+        setIdeas([]);
+      } else if (data.ideas && data.ideas.length > 0) {
+        setIdeas(data.ideas);
+        toast({
+          title: "🎲 Şansın Yaver Gitti!",
+          description: `Tamamen rastgele ${data.ideas.length} yaratıcı fikir üretildi`,
+        });
+      } else {
+        toast({
+          title: "Uyarı",
+          description: "Fikir üretilemedi, lütfen tekrar deneyin",
+          variant: "destructive",
+        });
+        setIdeas([]);
+      }
+    } catch (error) {
+      console.error("Error generating random ideas:", error);
+      toast({
+        title: "Hata",
+        description: error instanceof Error ? error.message : "Fikirler üretilirken bir hata oluştu",
+        variant: "destructive",
+      });
+      setIdeas([]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const generateIdeas = async () => {
@@ -242,7 +300,7 @@ export function IdeaGenerator() {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-10 border-t-2 border-primary/20">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-10 border-t-2 border-primary/20">
             <Button
               size="lg"
               onClick={generateIdeas}
@@ -259,6 +317,26 @@ export function IdeaGenerator() {
                 <>
                   <Sparkles className="h-6 w-6 mr-3" />
                   Fikirler Üret
+                </>
+              )}
+            </Button>
+            <Button
+              size="lg"
+              variant="secondary"
+              onClick={generateRandomIdea}
+              disabled={isLoading}
+              className="w-full sm:w-auto text-lg px-10 py-8 shadow-xl hover:shadow-chart-3/50 transition-all font-bold bg-gradient-to-r from-chart-3/80 to-chart-4/80 hover:from-chart-3 hover:to-chart-4"
+              data-testid="button-random-idea"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                  Şansını Deniyorum...
+                </>
+              ) : (
+                <>
+                  <Dices className="h-5 w-5 mr-2" />
+                  Şansımı Dene
                 </>
               )}
             </Button>
