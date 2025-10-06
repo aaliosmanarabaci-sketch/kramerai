@@ -67,6 +67,12 @@ Preferred communication style: Simple, everyday language.
 - Structured prompt engineering to maintain Kramer's creative persona
 - JSON response parsing for consistent idea format
 - Supports both filtered and random idea generation (all filters null)
+- **Idea Variety System:**
+  - 4 rotating prompt templates for diverse outputs
+  - Creativity levels: balanced (0.9), creative (1.2), wild (1.5 temperature)
+  - Random seed + timestamp injection for uniqueness
+  - Smart caching: tracks last 30 ideas per filter to avoid duplicates
+  - Optimized for speed: generates 4 ideas per request (reduced from 6)
 
 **Architecture Decisions:**
 - Separation of concerns: routes, storage, and external services in dedicated modules
@@ -169,6 +175,17 @@ Preferred communication style: Simple, everyday language.
 - `/saved` - Saved/favorite ideas page
 
 ## Recent Updates (October 2024)
+
+### Performance & Variety Enhancements (Latest)
+- **Idea Variety System**: Implemented multi-template prompt rotation (4 variants) with creativity levels
+- **Smart Caching**: Added deduplication system tracking last 30 ideas per filter combination
+- **Performance Optimization**: Reduced idea count from 6 to 4 for ~33% faster response time
+- **Dynamic Parameters**: Temperature ranges 0.9-1.5 based on creativity level (balanced/creative/wild)
+- **Randomness Injection**: Unique seed + timestamp per request for maximum variety
+
+### Design & Features
+- Dark, professional color scheme with slate/charcoal/navy tones
+- Simplified button designs (removed gradients for cleaner UI)
 - Added SavedIdeasContext for global favorites management
 - Implemented PDF export with jspdf and html2canvas
 - Created print-friendly CSS styles
@@ -177,5 +194,4 @@ Preferred communication style: Simple, everyday language.
 - Created dedicated saved ideas page with empty states
 - Implemented social sharing features (WhatsApp, Telegram, Email, Copy to Clipboard)
 - Added native Web Share API support for mobile devices
-- Updated color palette to blue-cyan gradient system (C5EFF8, AAE5F6, 5CBED7, 285F88, 192123)
 - Improved accessibility with proper contrast ratios in both light and dark modes

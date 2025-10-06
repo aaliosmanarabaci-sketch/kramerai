@@ -22,7 +22,7 @@ export const generateIdeasRequestSchema = z.object({
   budget: z.string().nullable().optional(),
   complexity: z.string().nullable().optional(),
   audience: z.string().nullable().optional(),
-  ideaCount: z.number().min(3).max(12).optional().default(6),
+  ideaCount: z.number().min(3).max(12).optional().default(4),
   creativityLevel: z.enum(["balanced", "creative", "wild"]).optional().default("balanced"),
 });
 

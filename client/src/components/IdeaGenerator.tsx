@@ -89,7 +89,7 @@ export function IdeaGenerator() {
           complexity: null,
           audience: null,
           creativityLevel: "wild",
-          ideaCount: 6,
+          ideaCount: 4,
         }),
       });
 
@@ -149,7 +149,7 @@ export function IdeaGenerator() {
           complexity: selectedComplexity,
           audience: selectedAudience,
           creativityLevel: "creative",
-          ideaCount: 6,
+          ideaCount: 4,
         }),
       });
 
