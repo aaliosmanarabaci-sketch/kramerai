@@ -179,7 +179,8 @@ Preferred communication style: Simple, everyday language.
 ### Pre-Launch UX & SEO Improvements (Latest)
 - **Open Graph Tags**: Added comprehensive OG meta tags for social media sharing (Twitter, Facebook, WhatsApp, LinkedIn)
 - **Loading Skeleton Cards**: Implemented 3 skeleton cards during idea generation for better loading feedback
-- **Welcome/Intro State**: Added initial welcome card with call-to-action buttons for first-time user experience
+- **Welcome/Intro State**: Added initial welcome card with step-by-step instructions (1-2-3 numbered guide)
+- **Filter Gating**: "Fikirler Üret" button disabled until at least one filter is selected, button text changes to "Önce Filtre Seçin" when disabled
 - **State Management**: Clean state transitions between welcome → loading → results with proper visual feedback
 
 ### Performance & Variety Enhancements
