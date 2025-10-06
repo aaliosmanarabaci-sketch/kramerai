@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { useSavedIdeas } from "@/contexts/SavedIdeasContext";
+import kramerLogo from "@assets/kramer_1759751289249.png";
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -55,8 +56,8 @@ export function Header() {
         >
           <div className="relative">
             <div className="absolute inset-0 bg-primary/20 blur-lg rounded-full" />
-            <div className="relative bg-gradient-to-br from-primary to-destructive p-2 rounded-lg">
-              <Zap className="h-5 w-5 text-primary-foreground" />
+            <div className="relative bg-gradient-to-br from-primary to-destructive p-1 rounded-lg">
+              <img src={kramerLogo} alt="Kramer" className="h-8 w-8 object-cover rounded-md" />
             </div>
           </div>
           <div className="flex flex-col items-start">
