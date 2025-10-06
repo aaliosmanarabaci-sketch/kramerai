@@ -368,4 +368,38 @@
     background-size: 200% 200%;
     animation: gradient 3s ease infinite;
   }
+
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+
+    [data-testid="modal-idea-detail"],
+    [data-testid="modal-idea-detail"] * {
+      visibility: visible;
+    }
+
+    [data-testid="modal-idea-detail"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+    }
+
+    .print\\:hidden {
+      display: none !important;
+    }
+
+    .print\\:block {
+      display: block !important;
+    }
+
+    .print\\:p-8 {
+      padding: 2rem !important;
+    }
+
+    @page {
+      margin: 1.5cm;
+    }
+  }
 }

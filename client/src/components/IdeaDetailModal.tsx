@@ -1,4 +1,4 @@
-import { CheckCircle2, XCircle, Lightbulb, TrendingUp, Users, MapPin } from "lucide-react";
+import { CheckCircle2, XCircle, Lightbulb, TrendingUp, Users, MapPin, Download, Printer } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -7,9 +7,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import type { Idea } from "@shared/schema";
+import { useRef } from "react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 interface IdeaDetailModalProps {
   idea: Idea | null;
@@ -18,33 +22,108 @@ interface IdeaDetailModalProps {
 }
 
 export function IdeaDetailModal({ idea, isOpen, onClose }: IdeaDetailModalProps) {
+  const contentRef = useRef<HTMLDivElement>(null);
+
   if (!idea) return null;
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleDownloadPDF = async () => {
+    if (!contentRef.current) return;
+
+    try {
+      const canvas = await html2canvas(contentRef.current, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+      });
+
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+      });
+
+      const imgWidth = 210;
+      const pageHeight = 297;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save(`${idea.title.replace(/\s+/g, "_")}_KramerAI.pdf`);
+    } catch (error) {
+      console.error("PDF oluşturma hatası:", error);
+    }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" data-testid="modal-idea-detail">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">{idea.title}</DialogTitle>
-          <DialogDescription className="text-base">{idea.description}</DialogDescription>
-          <div className="flex flex-wrap gap-2 pt-2">
-            <Badge variant="secondary">{idea.category}</Badge>
-            <Badge variant="outline">{idea.budget}</Badge>
-            <Badge variant="outline">{idea.complexity}</Badge>
-            <div className="flex items-center gap-1">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Lightbulb
-                  key={i}
-                  className={cn(
-                    "h-4 w-4",
-                    i < idea.uniqueness ? "text-primary fill-primary" : "text-muted-foreground/30"
-                  )}
-                />
-              ))}
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto print:max-h-none print:overflow-visible" data-testid="modal-idea-detail">
+        <div ref={contentRef} className="print:p-8">
+          <DialogHeader>
+            <div className="flex items-start justify-between gap-4 flex-wrap print:hidden">
+              <div className="flex-1">
+                <DialogTitle className="text-2xl font-bold">{idea.title}</DialogTitle>
+                <DialogDescription className="text-base mt-2">{idea.description}</DialogDescription>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={handlePrint}
+                  data-testid="button-print"
+                >
+                  <Printer className="h-4 w-4 mr-2" />
+                  Yazdır
+                </Button>
+                <Button
+                  size="sm"
+                  variant="default"
+                  onClick={handleDownloadPDF}
+                  data-testid="button-download-pdf"
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  PDF İndir
+                </Button>
+              </div>
             </div>
-          </div>
-        </DialogHeader>
 
-        <div className="space-y-6 pt-4">
+            <div className="hidden print:block mb-6">
+              <h1 className="text-3xl font-bold mb-3">{idea.title}</h1>
+              <p className="text-lg text-gray-600">{idea.description}</p>
+            </div>
+            <div className="flex flex-wrap gap-2 pt-2">
+              <Badge variant="secondary">{idea.category}</Badge>
+              <Badge variant="outline">{idea.budget}</Badge>
+              <Badge variant="outline">{idea.complexity}</Badge>
+              <div className="flex items-center gap-1">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Lightbulb
+                    key={i}
+                    className={cn(
+                      "h-4 w-4",
+                      i < idea.uniqueness ? "text-primary fill-primary" : "text-muted-foreground/30"
+                    )}
+                  />
+                ))}
+              </div>
+            </div>
+          </DialogHeader>
+
+          <div className="space-y-6 pt-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-muted/50 rounded-lg p-4">
               <div className="flex items-center gap-2 mb-2">
@@ -139,6 +218,10 @@ export function IdeaDetailModal({ idea, isOpen, onClose }: IdeaDetailModalProps)
                 </Badge>
               ))}
             </div>
+          </div>
+
+          <div className="hidden print:block mt-8 pt-4 border-t text-center text-sm text-gray-500">
+            <p>Bu rapor KramerAI tarafından oluşturulmuştur - {new Date().toLocaleDateString("tr-TR")}</p>
           </div>
         </div>
       </DialogContent>
