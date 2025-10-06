@@ -47,7 +47,13 @@ export function IdeaGenerator() {
       }
 
       const data = await response.json();
-      setIdeas(data.ideas);
+      
+      if (data.error) {
+        console.error("API error:", data.error);
+        setIdeas([]);
+      } else {
+        setIdeas(data.ideas || []);
+      }
     } catch (error) {
       console.error("Error generating ideas:", error);
       setIdeas([]);

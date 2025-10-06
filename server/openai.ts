@@ -5,6 +5,10 @@ import type { GenerateIdeasRequest, Idea } from "@shared/schema";
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export async function generateIdeas(request: GenerateIdeasRequest): Promise<Idea[]> {
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error("OPENAI_API_KEY environment variable is not set");
+  }
+
   const { industry, budget, complexity, audience } = request;
 
   const systemPrompt = `Sen Cosmo Kramer gibi yaratıcı ve çılgın fikirlere sahip bir girişimcisin. Seinfeld dizisindeki Kramer karakterinin ruhunu taşıyan, özgün ve ilginç iş fikirleri üretiyorsun. Fikirler sıradışı olmalı ama aynı zamanda gerçekleştirilebilir olmalı.`;
@@ -50,7 +54,7 @@ export async function generateIdeas(request: GenerateIdeasRequest): Promise<Idea
         { role: "user", content: userPrompt },
       ],
       response_format: { type: "json_object" },
-      max_completion_tokens: 4096,
+      max_tokens: 4096,
     });
 
     const content = response.choices[0].message.content;

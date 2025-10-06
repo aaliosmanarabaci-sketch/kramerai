@@ -12,6 +12,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ ideas });
     } catch (error) {
       console.error("Error generating ideas:", error);
+      
+      if (error instanceof Error && error.name === "ZodError") {
+        return res.status(400).json({ 
+          error: "Geçersiz istek parametreleri" 
+        });
+      }
+      
       res.status(500).json({ 
         error: error instanceof Error ? error.message : "Fikirler üretilirken bir hata oluştu" 
       });
