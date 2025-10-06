@@ -16,3 +16,23 @@ export const insertUserSchema = createInsertSchema(users).pick({
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
+
+export const generateIdeasRequestSchema = z.object({
+  industry: z.string().optional(),
+  budget: z.string().optional(),
+  complexity: z.string().optional(),
+  audience: z.string().optional(),
+});
+
+export type GenerateIdeasRequest = z.infer<typeof generateIdeasRequestSchema>;
+
+export const ideaSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  category: z.string(),
+  budget: z.string(),
+  complexity: z.string(),
+  uniqueness: z.number().min(1).max(5),
+});
+
+export type Idea = z.infer<typeof ideaSchema>;

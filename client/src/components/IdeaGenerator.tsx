@@ -25,70 +25,35 @@ export function IdeaGenerator() {
     console.log("Filters cleared");
   };
 
-  const generateIdeas = () => {
+  const generateIdeas = async () => {
     setIsLoading(true);
-    console.log("Generating ideas with filters:", {
-      industry: selectedIndustry,
-      budget: selectedBudget,
-      complexity: selectedComplexity,
-      audience: selectedAudience,
-    });
+    
+    try {
+      const response = await fetch("/api/generate-ideas", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          industry: selectedIndustry,
+          budget: selectedBudget,
+          complexity: selectedComplexity,
+          audience: selectedAudience,
+        }),
+      });
 
-    setTimeout(() => {
-      const mockIdeas: IdeaCardProps[] = [
-        {
-          title: "Kahve Masası Kitabı 2.0",
-          description: "QR kod ile dijital içerik sunan, kendisi de kahve masasına dönüşebilen interaktif bir kitap. Her sayfa farklı bir kahve masası tasarımını anlatıyor.",
-          category: selectedIndustry || "Eğlence",
-          budget: selectedBudget || "Orta Bütçe",
-          complexity: selectedComplexity || "Orta",
-          uniqueness: 5,
-        },
-        {
-          title: "Akıllı Sütyen Platformu",
-          description: "Erkekler için özel olarak tasarlanmış, postür düzeltici sensörler içeren akıllı sütyen. Mobil uygulama ile sağlık takibi yapılabiliyor.",
-          category: selectedIndustry || "Sağlık",
-          budget: selectedBudget || "Yüksek Bütçe",
-          complexity: selectedComplexity || "Karmaşık",
-          uniqueness: 4,
-        },
-        {
-          title: "Sanal Plaj Ofis",
-          description: "VR gözlüğü ile ofiste çalışırken kendinizi sahilde hissedebileceğiniz bir platform. Dalga sesleri ve kumsal atmosferi gerçek zamanlı.",
-          category: selectedIndustry || "Teknoloji",
-          budget: selectedBudget || "Orta Bütçe",
-          complexity: selectedComplexity || "Orta",
-          uniqueness: 5,
-        },
-        {
-          title: "Yenilebilir Giysi Serisi",
-          description: "Tamamen organik malzemelerden üretilen, aç kaldığınızda yiyebileceğiniz moda koleksiyonu. Sürdürülebilir ve sıfır atık.",
-          category: selectedIndustry || "Moda",
-          budget: selectedBudget || "Düşük Bütçe",
-          complexity: selectedComplexity || "Basit",
-          uniqueness: 5,
-        },
-        {
-          title: "Son Lokma Ödemez Uygulaması",
-          description: "Restoranlarda grup hesabını bölerken, pizzadan son lokmayı yiyen kişinin ödeme yapmamasını sağlayan gamification uygulaması.",
-          category: selectedIndustry || "Yiyecek & İçecek",
-          budget: selectedBudget || "Düşük Bütçe",
-          complexity: selectedComplexity || "Basit",
-          uniqueness: 4,
-        },
-        {
-          title: "Periskop Araç Aksesuarı",
-          description: "Trafikte önü görmek için araca takılabilen, katlanabilir periskop sistemi. Kamera ile canlı görüntü aktarımı yapıyor.",
-          category: selectedIndustry || "Teknoloji",
-          budget: selectedBudget || "Orta Bütçe",
-          complexity: selectedComplexity || "Orta",
-          uniqueness: 4,
-        },
-      ];
+      if (!response.ok) {
+        throw new Error("Fikirler üretilirken bir hata oluştu");
+      }
 
-      setIdeas(mockIdeas);
+      const data = await response.json();
+      setIdeas(data.ideas);
+    } catch (error) {
+      console.error("Error generating ideas:", error);
+      setIdeas([]);
+    } finally {
       setIsLoading(false);
-    }, 2000);
+    }
   };
 
   return (
