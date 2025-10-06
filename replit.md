@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Cosmo Kramer Ideas Tool is a creative web application that generates entrepreneurial business ideas inspired by the chaotic creativity of Cosmo Kramer from Seinfeld. The application uses OpenAI's GPT API to generate unique, creative business ideas based on user-selected filters (industry, budget, complexity, and target audience). The design embraces a retro-modern fusion aesthetic that channels Kramer's playful energy through a polished, contemporary interface.
+The Cosmo Kramer Ideas Tool is a creative web application that generates entrepreneurial business ideas inspired by the chaotic creativity of Cosmo Kramer from Seinfeld. The application uses Google Gemini API to generate unique, creative business ideas based on user-selected filters (industry, budget, complexity, and target audience). Users can save favorite ideas, export them as PDFs, and even generate completely random ideas with the "Try My Luck" feature. The design embraces a retro-modern fusion aesthetic that channels Kramer's playful energy through a polished, contemporary interface.
 
 ## User Preferences
 
@@ -28,8 +28,9 @@ Preferred communication style: Simple, everyday language.
 
 **State Management:**
 - React Query for server state (API responses, caching)
-- React Context for theme management (ThemeProvider)
+- React Context for theme management (ThemeProvider) and saved ideas (SavedIdeasContext)
 - Local component state for UI interactions (filters, loading states)
+- localStorage for persisting favorite ideas across sessions
 
 **Key Design Patterns:**
 - Component composition with reusable UI primitives
@@ -56,10 +57,11 @@ Preferred communication style: Simple, everyday language.
 - Prepared for database integration (Neon serverless PostgreSQL via connection string)
 
 **AI Integration:**
-- OpenAI API integration for idea generation
-- Uses GPT-5 model (latest as of specification)
+- Google Gemini API integration for idea generation
+- Uses gemini-2.5-flash model
 - Structured prompt engineering to maintain Kramer's creative persona
 - JSON response parsing for consistent idea format
+- Supports both filtered and random idea generation (all filters null)
 
 **Architecture Decisions:**
 - Separation of concerns: routes, storage, and external services in dedicated modules
@@ -70,9 +72,9 @@ Preferred communication style: Simple, everyday language.
 ### External Dependencies
 
 **AI Service:**
-- OpenAI API (GPT-5 model) for creative idea generation
-- Requires OPENAI_API_KEY environment variable
-- Generates ideas with title, description, category, budget, complexity, and uniqueness rating
+- Google Gemini API (gemini-2.5-flash model) for creative idea generation
+- Requires GEMINI_API_KEY environment variable
+- Generates ideas with title, description, category, budget, complexity, uniqueness rating, roadmap, pros/cons, skills, and market analysis
 
 **Database:**
 - PostgreSQL (via Neon serverless)
@@ -85,6 +87,7 @@ Preferred communication style: Simple, everyday language.
 - Embla Carousel for carousel functionality
 - React Hook Form with Zod resolvers for form validation
 - Lucide React for consistent iconography
+- jsPDF and html2canvas for PDF export functionality
 
 **Development Tools:**
 - Replit-specific plugins for development experience (cartographer, dev banner, runtime error overlay)
@@ -95,3 +98,66 @@ Preferred communication style: Simple, everyday language.
 - Vite for frontend bundling and optimization
 - esbuild for server-side bundling (production builds)
 - Static file serving in production mode
+
+## Key Features
+
+### 1. Idea Generation with Smart Filtering
+- 19 industry categories (Technology, Food & Beverage, Fashion, etc.)
+- 5 budget ranges (0-5,000₺ to 500,000₺+)
+- 5 complexity levels (Very Simple to Very Complex)
+- 11 audience types (B2B, B2C, Students, Entrepreneurs, etc.)
+- Color-coded filter cards with gradient backgrounds
+- Real-time idea generation powered by Google Gemini AI
+
+### 2. Random Idea Generator ("Şansımı Dene")
+- "Try My Luck" button for completely random ideas
+- Bypasses all filters for unexpected creative combinations
+- Uses dice icon and special gradient styling
+- Perfect for users seeking inspiration without constraints
+- Toast notification: "🎲 Şansın Yaver Gitti!"
+
+### 3. Favorites/Save System
+- Save favorite ideas with heart icon on each idea card
+- Persistent storage using localStorage
+- Dedicated "/saved" route for viewing all saved ideas
+- Badge counter in navbar showing number of saved ideas
+- Toast notifications for save/unsave actions
+- "Clear All" button to remove all favorites at once
+- Empty state with call-to-action when no favorites exist
+
+### 4. PDF Export & Print Functionality
+- Export idea details as professional PDF reports
+- Print-friendly CSS with dedicated media queries
+- Includes full roadmap, pros/cons, required skills, and market analysis
+- Filename format: {idea_title}_KramerAI.pdf
+- Footer with generation date and KramerAI branding
+- Uses jsPDF and html2canvas for high-quality rendering
+
+### 5. Detailed Idea Analysis
+- Comprehensive roadmap with phases, durations, and tasks
+- Pros and cons analysis
+- Required skills breakdown
+- Potential revenue estimates
+- Target market size information
+- Uniqueness rating (1-5 lightbulbs)
+- Category, budget, and complexity badges
+
+### 6. Responsive Design & Navigation
+- Mobile-first responsive layout
+- Sticky navbar with smooth scrolling
+- Desktop and mobile menu variants
+- Theme toggle (light/dark mode)
+- Gradient animations and glassmorphism effects
+- Print-optimized layouts
+
+## Routes
+- `/` - Homepage with hero, filters, and idea generator
+- `/saved` - Saved/favorite ideas page
+
+## Recent Updates (October 2024)
+- Added SavedIdeasContext for global favorites management
+- Implemented PDF export with jspdf and html2canvas
+- Created print-friendly CSS styles
+- Added random idea generator feature
+- Enhanced navbar with favorites badge counter
+- Created dedicated saved ideas page with empty states
