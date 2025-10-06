@@ -68,6 +68,8 @@ export function IdeaGenerator() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
+  const hasAnyFilter = selectedIndustry || selectedBudget || selectedComplexity || selectedAudience;
+
   const clearFilters = () => {
     setSelectedIndustry(null);
     setSelectedBudget(null);
@@ -310,7 +312,7 @@ export function IdeaGenerator() {
             <Button
               size="lg"
               onClick={generateIdeas}
-              disabled={isLoading}
+              disabled={isLoading || !hasAnyFilter}
               className="w-full sm:w-auto px-8"
               data-testid="button-generate-ideas"
             >
@@ -322,7 +324,7 @@ export function IdeaGenerator() {
               ) : (
                 <>
                   <Sparkles className="h-5 w-5 mr-2" />
-                  Fikirler Üret
+                  {hasAnyFilter ? "Fikirler Üret" : "Önce Filtre Seçin"}
                 </>
               )}
             </Button>
@@ -405,30 +407,33 @@ export function IdeaGenerator() {
                   Hoş Geldiniz!
                 </h3>
                 <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-                  Kramer tarzı <span className="text-foreground font-bold">yaratıcı girişim fikirleri</span> üretmeye hazır mısınız? 
-                  Yukarıdaki filtreleri kullanarak ihtiyaçlarınıza özel fikirler üretin veya 
-                  <span className="text-primary font-bold"> "Şansımı Dene"</span> butonuna basarak tamamen rastgele fikirler keşfedin!
+                  Kramer tarzı <span className="text-foreground font-bold">yaratıcı girişim fikirleri</span> üretmeye hazır mısınız?
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                  <Button
-                    size="lg"
-                    onClick={generateIdeas}
-                    className="text-lg px-10 py-6 shadow-xl"
-                    data-testid="button-welcome-generate"
-                  >
-                    <Sparkles className="h-5 w-5 mr-2" />
-                    İlk Fikirlerimi Üret
-                  </Button>
-                  <Button
-                    size="lg"
-                    variant="secondary"
-                    onClick={generateRandomIdea}
-                    className="text-lg px-10 py-6 shadow-xl"
-                    data-testid="button-welcome-random"
-                  >
-                    <Dices className="h-5 w-5 mr-2" />
-                    Şansımı Dene
-                  </Button>
+                <div className="space-y-4 pt-2">
+                  <div className="flex items-center gap-3 text-left max-w-xl mx-auto">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                      <span className="text-primary font-bold">1</span>
+                    </div>
+                    <p className="text-base text-muted-foreground">
+                      Yukarıdaki <span className="text-foreground font-semibold">filtreleri seçin</span> (sektör, bütçe, karmaşıklık, hedef kitle)
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3 text-left max-w-xl mx-auto">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                      <span className="text-primary font-bold">2</span>
+                    </div>
+                    <p className="text-base text-muted-foreground">
+                      <span className="text-primary font-semibold">"Fikirler Üret"</span> butonuna basın veya <span className="text-primary font-semibold">"Şansımı Dene"</span> ile rastgele fikirler keşfedin
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3 text-left max-w-xl mx-auto">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                      <span className="text-primary font-bold">3</span>
+                    </div>
+                    <p className="text-base text-muted-foreground">
+                      Kramer tarzı <span className="text-foreground font-semibold">yaratıcı fikirler</span> hazır olacak!
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
