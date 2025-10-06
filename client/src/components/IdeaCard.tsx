@@ -1,7 +1,13 @@
-import { Heart, Share2, Lightbulb, Eye } from "lucide-react";
+import { Heart, Share2, Lightbulb, Eye, Copy, Mail } from "lucide-react";
+import { SiWhatsapp, SiTelegram } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import type { Idea } from "@shared/schema";
@@ -36,6 +42,7 @@ const categoryColors: Record<string, string> = {
 
 export function IdeaCard(idea: IdeaCardProps) {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [isShareOpen, setIsShareOpen] = useState(false);
   const { addIdea, removeIdea, isIdeaSaved } = useSavedIdeas();
   const { toast } = useToast();
   const isSaved = isIdeaSaved(idea.title);
@@ -56,8 +63,71 @@ export function IdeaCard(idea: IdeaCardProps) {
     }
   };
 
-  const handleShare = () => {
-    console.log(`Sharing idea: ${idea.title}`);
+  const getShareText = () => {
+    return `🚀 ${idea.title}\n\n${idea.description}\n\n📊 Kategori: ${idea.category}\n💰 Bütçe: ${idea.budget}\n⚙️ Karmaşıklık: ${idea.complexity}\n\n✨ KramerAI ile üretildi!`;
+  };
+
+  const handleWhatsAppShare = () => {
+    const text = encodeURIComponent(getShareText());
+    window.open(`https://wa.me/?text=${text}`, '_blank');
+    setIsShareOpen(false);
+    toast({
+      title: "WhatsApp'ta Paylaş",
+      description: "WhatsApp açılıyor...",
+    });
+  };
+
+  const handleTelegramShare = () => {
+    const text = encodeURIComponent(getShareText());
+    window.open(`https://t.me/share/url?text=${text}`, '_blank');
+    setIsShareOpen(false);
+    toast({
+      title: "Telegram'da Paylaş",
+      description: "Telegram açılıyor...",
+    });
+  };
+
+  const handleEmailShare = () => {
+    const subject = encodeURIComponent(`💡 İş Fikri: ${idea.title}`);
+    const body = encodeURIComponent(getShareText());
+    window.open(`mailto:?subject=${subject}&body=${body}`, '_blank');
+    setIsShareOpen(false);
+    toast({
+      title: "Email ile Gönder",
+      description: "Email uygulamanız açılıyor...",
+    });
+  };
+
+  const handleCopyLink = async () => {
+    const text = getShareText();
+    try {
+      await navigator.clipboard.writeText(text);
+      setIsShareOpen(false);
+      toast({
+        title: "Kopyalandı!",
+        description: "Fikir panoya kopyalandı.",
+      });
+    } catch (error) {
+      toast({
+        title: "Hata",
+        description: "Kopyalama başarısız oldu.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleNativeShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `💡 ${idea.title}`,
+          text: getShareText(),
+        });
+        setIsShareOpen(false);
+      } catch (error) {
+        console.log('Share cancelled or failed:', error);
+      }
+    }
   };
 
   const borderColor = categoryColors[idea.category] || categoryColors["default"];
@@ -103,15 +173,74 @@ export function IdeaCard(idea: IdeaCardProps) {
               <Heart className={cn("h-4 w-4 mr-1", isSaved && "fill-current")} />
               {isSaved ? "Kaydedildi" : "Kaydet"}
             </Button>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={handleShare}
-              data-testid="button-share-idea"
-            >
-              <Share2 className="h-4 w-4 mr-1" />
-              Paylaş
-            </Button>
+            <Popover open={isShareOpen} onOpenChange={setIsShareOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  data-testid="button-share-idea"
+                >
+                  <Share2 className="h-4 w-4 mr-1" />
+                  Paylaş
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-56 p-2" align="start">
+                <div className="flex flex-col gap-1">
+                  {navigator.share && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleNativeShare}
+                      className="justify-start hover-elevate"
+                      data-testid="button-native-share"
+                    >
+                      <Share2 className="h-4 w-4 mr-2" />
+                      Paylaş...
+                    </Button>
+                  )}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleWhatsAppShare}
+                    className="justify-start hover-elevate"
+                    data-testid="button-share-whatsapp"
+                  >
+                    <SiWhatsapp className="h-4 w-4 mr-2 text-green-600" />
+                    WhatsApp
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleTelegramShare}
+                    className="justify-start hover-elevate"
+                    data-testid="button-share-telegram"
+                  >
+                    <SiTelegram className="h-4 w-4 mr-2 text-blue-500" />
+                    Telegram
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleEmailShare}
+                    className="justify-start hover-elevate"
+                    data-testid="button-share-email"
+                  >
+                    <Mail className="h-4 w-4 mr-2" />
+                    Email
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleCopyLink}
+                    className="justify-start hover-elevate"
+                    data-testid="button-copy-text"
+                  >
+                    <Copy className="h-4 w-4 mr-2" />
+                    Metni Kopyala
+                  </Button>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
           <Button
             size="sm"
