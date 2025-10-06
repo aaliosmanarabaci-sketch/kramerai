@@ -65,7 +65,7 @@ export function Hero() {
             Filtreleri ayarlayın, detaylı yol haritaları alın ve bir sonraki büyük projenizi keşfedin.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
+          <div className="flex justify-center pt-6">
             <Button
               size="lg"
               onClick={scrollToGenerator}
@@ -74,18 +74,6 @@ export function Hero() {
             >
               <Sparkles className="h-5 w-5 mr-2" />
               İlk Fikrimi Üret
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={() => {
-                const element = document.getElementById("how-it-works");
-                element?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="text-lg px-10 py-6 backdrop-blur-sm"
-              data-testid="button-learn-more"
-            >
-              Nasıl Çalışır?
             </Button>
           </div>
 

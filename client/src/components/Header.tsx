@@ -20,7 +20,6 @@ export function Header() {
   const navItems = [
     { label: "Ana Sayfa", icon: Home, action: () => scrollToTop() },
     { label: "Nasıl Çalışır", icon: HelpCircle, action: () => scrollToSection("how-it-works") },
-    { label: "Fikir Üret", icon: Sparkles, action: () => scrollToSection("generator") },
     { label: "Kramer Hakkında", icon: Info, action: () => scrollToSection("kramer-inspiration") },
   ];
 
@@ -104,15 +103,6 @@ export function Header() {
                 </Button>
               );
             })}
-            <Button
-              variant="default"
-              onClick={() => scrollToSection("generator")}
-              className="justify-start gap-3 h-12 mt-2 shadow-md"
-              data-testid="mobile-button-generate-cta"
-            >
-              <Lightbulb className="h-5 w-5" />
-              <span className="font-medium text-base">Fikir Üret</span>
-            </Button>
           </nav>
         </div>
       )}
