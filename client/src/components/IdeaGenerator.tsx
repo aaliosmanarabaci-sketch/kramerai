@@ -133,28 +133,39 @@ export function IdeaGenerator() {
   };
 
   return (
-    <section id="generator" className="py-24 bg-gradient-to-b from-background via-muted/20 to-background">
-      <div className="container mx-auto px-4 max-w-7xl">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-6 border border-primary/20">
-            <Sparkles className="h-4 w-4 text-primary" />
-            <span className="text-sm font-semibold">Fikir Üretim Merkezi</span>
+    <section id="generator" className="py-24 bg-gradient-to-b from-background via-muted/20 to-background relative overflow-hidden">
+      <div className="absolute inset-0 opacity-[0.03]">
+        <div className="absolute top-20 left-10 w-96 h-96 rounded-full bg-primary blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-destructive blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }} />
+      </div>
+      
+      <div className="container mx-auto px-4 max-w-7xl relative z-10">
+        <div className="text-center mb-20">
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary/20 to-destructive/20 rounded-full mb-8 border-2 border-primary/30 shadow-xl backdrop-blur-sm animate-pulse">
+            <Sparkles className="h-5 w-5 text-primary animate-spin" style={{ animationDuration: '3s' }} />
+            <span className="text-base font-bold bg-gradient-to-r from-primary to-destructive bg-clip-text text-transparent">
+              🎯 Fikir Üretim Merkezi
+            </span>
           </div>
-          <h2 className="font-serif text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+          <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold mb-8 bg-gradient-to-r from-primary via-destructive to-primary bg-clip-text text-transparent animate-gradient leading-tight">
             Fikirlerini Filtrele
           </h2>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            İhtiyaçlarına göre filtreleri seç ve yapay zeka <span className="text-foreground font-semibold">Kramer tarzı yaratıcı fikirler</span> üretsin
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+            İhtiyaçlarına göre <span className="text-foreground font-bold">filtreleri seç</span> ve yapay zeka <span className="text-primary font-bold">Kramer tarzı yaratıcı fikirler</span> üretsin
           </p>
         </div>
 
-        <div className="bg-card/50 backdrop-blur-sm border rounded-2xl p-6 md:p-10 mb-12 space-y-8 shadow-lg">
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-sm font-bold mb-4 text-foreground flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                Sektör
-              </h3>
+        <div className="bg-gradient-to-br from-card via-card to-card/80 backdrop-blur-md border-2 border-primary/20 rounded-3xl p-8 md:p-12 mb-16 space-y-10 shadow-2xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-6 border-2 border-primary/20 hover-elevate transition-all">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="bg-primary/20 p-3 rounded-xl">
+                  <Sparkles className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-lg font-bold text-foreground">
+                  Sektör
+                </h3>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {industries.map((industry) => (
                   <FilterChip
@@ -167,11 +178,15 @@ export function IdeaGenerator() {
               </div>
             </div>
 
-            <div>
-              <h3 className="text-sm font-bold mb-4 text-foreground flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                Bütçe
-              </h3>
+            <div className="bg-gradient-to-br from-chart-2/5 to-chart-2/10 rounded-2xl p-6 border-2 border-chart-2/20 hover-elevate transition-all">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="bg-chart-2/20 p-3 rounded-xl">
+                  <Sparkles className="h-6 w-6 text-chart-2" />
+                </div>
+                <h3 className="text-lg font-bold text-foreground">
+                  Bütçe
+                </h3>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {budgets.map((budget) => (
                   <FilterChip
@@ -184,11 +199,15 @@ export function IdeaGenerator() {
               </div>
             </div>
 
-            <div>
-              <h3 className="text-sm font-bold mb-4 text-foreground flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                Karmaşıklık
-              </h3>
+            <div className="bg-gradient-to-br from-chart-3/5 to-chart-3/10 rounded-2xl p-6 border-2 border-chart-3/20 hover-elevate transition-all">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="bg-chart-3/20 p-3 rounded-xl">
+                  <Sparkles className="h-6 w-6 text-chart-3" />
+                </div>
+                <h3 className="text-lg font-bold text-foreground">
+                  Karmaşıklık
+                </h3>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {complexities.map((complexity) => (
                   <FilterChip
@@ -201,11 +220,15 @@ export function IdeaGenerator() {
               </div>
             </div>
 
-            <div>
-              <h3 className="text-sm font-bold mb-4 text-foreground flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                Hedef Kitle
-              </h3>
+            <div className="bg-gradient-to-br from-chart-4/5 to-chart-4/10 rounded-2xl p-6 border-2 border-chart-4/20 hover-elevate transition-all">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="bg-chart-4/20 p-3 rounded-xl">
+                  <Sparkles className="h-6 w-6 text-chart-4" />
+                </div>
+                <h3 className="text-lg font-bold text-foreground">
+                  Hedef Kitle
+                </h3>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {audiences.map((audience) => (
                   <FilterChip
@@ -219,31 +242,31 @@ export function IdeaGenerator() {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center gap-4 pt-6 border-t">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-10 border-t-2 border-primary/20">
             <Button
               size="lg"
               onClick={generateIdeas}
               disabled={isLoading}
-              className="w-full sm:w-auto text-lg px-12 py-6 shadow-lg hover:shadow-xl transition-all"
+              className="w-full sm:w-auto text-xl px-16 py-8 shadow-2xl hover:shadow-primary/50 transition-all font-bold bg-gradient-to-r from-primary to-destructive hover:from-primary/90 hover:to-destructive/90"
               data-testid="button-generate-ideas"
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                  <Loader2 className="h-6 w-6 mr-3 animate-spin" />
                   Kramer Gibi Düşünüyor...
                 </>
               ) : (
                 <>
-                  <Sparkles className="h-5 w-5 mr-2" />
+                  <Sparkles className="h-6 w-6 mr-3" />
                   Fikirler Üret
                 </>
               )}
             </Button>
             <Button
-              variant="ghost"
+              variant="outline"
               onClick={clearFilters}
               disabled={isLoading}
-              className="hover-elevate"
+              className="hover-elevate text-base px-6"
               data-testid="button-clear-filters"
             >
               Filtreleri Temizle

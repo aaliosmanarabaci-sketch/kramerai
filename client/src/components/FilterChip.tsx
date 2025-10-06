@@ -13,7 +13,12 @@ export function FilterChip({ label, isActive, onClick }: FilterChipProps) {
       variant={isActive ? "default" : "outline"}
       size="sm"
       onClick={onClick}
-      className={cn("rounded-full", !isActive && "hover-elevate")}
+      className={cn(
+        "rounded-full font-semibold transition-all",
+        isActive 
+          ? "shadow-lg scale-105" 
+          : "hover-elevate hover:scale-105 hover:border-primary/50"
+      )}
       data-testid={`filter-chip-${label.toLowerCase().replace(/\s+/g, "-")}`}
     >
       {label}
