@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Sparkles, Loader2, RefreshCw, Dices } from "lucide-react";
+import { Sparkles, Loader2, RefreshCw, Dices, Briefcase, Wallet, Gauge, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FilterChip } from "./FilterChip";
 import { IdeaCard, type IdeaCardProps } from "./IdeaCard";
@@ -89,7 +89,7 @@ export function IdeaGenerator() {
           complexity: null,
           audience: null,
           creativityLevel: "wild",
-          ideaCount: 4,
+          ideaCount: 3,
         }),
       });
 
@@ -149,7 +149,7 @@ export function IdeaGenerator() {
           complexity: selectedComplexity,
           audience: selectedAudience,
           creativityLevel: "creative",
-          ideaCount: 4,
+          ideaCount: 3,
         }),
       });
 
@@ -222,7 +222,7 @@ export function IdeaGenerator() {
             <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-6 border-2 border-primary/20 hover-elevate transition-all">
               <div className="flex items-center gap-3 mb-6">
                 <div className="bg-primary/20 p-3 rounded-xl">
-                  <Sparkles className="h-6 w-6 text-primary" />
+                  <Briefcase className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-lg font-bold text-foreground">
                   Sektör
@@ -243,7 +243,7 @@ export function IdeaGenerator() {
             <div className="bg-gradient-to-br from-chart-2/5 to-chart-2/10 rounded-2xl p-6 border-2 border-chart-2/20 hover-elevate transition-all">
               <div className="flex items-center gap-3 mb-6">
                 <div className="bg-chart-2/20 p-3 rounded-xl">
-                  <Sparkles className="h-6 w-6 text-chart-2" />
+                  <Wallet className="h-6 w-6 text-chart-2" />
                 </div>
                 <h3 className="text-lg font-bold text-foreground">
                   Bütçe
@@ -264,7 +264,7 @@ export function IdeaGenerator() {
             <div className="bg-gradient-to-br from-chart-3/5 to-chart-3/10 rounded-2xl p-6 border-2 border-chart-3/20 hover-elevate transition-all">
               <div className="flex items-center gap-3 mb-6">
                 <div className="bg-chart-3/20 p-3 rounded-xl">
-                  <Sparkles className="h-6 w-6 text-chart-3" />
+                  <Gauge className="h-6 w-6 text-chart-3" />
                 </div>
                 <h3 className="text-lg font-bold text-foreground">
                   Karmaşıklık
@@ -285,7 +285,7 @@ export function IdeaGenerator() {
             <div className="bg-gradient-to-br from-chart-4/5 to-chart-4/10 rounded-2xl p-6 border-2 border-chart-4/20 hover-elevate transition-all">
               <div className="flex items-center gap-3 mb-6">
                 <div className="bg-chart-4/20 p-3 rounded-xl">
-                  <Sparkles className="h-6 w-6 text-chart-4" />
+                  <Users className="h-6 w-6 text-chart-4" />
                 </div>
                 <h3 className="text-lg font-bold text-foreground">
                   Hedef Kitle
