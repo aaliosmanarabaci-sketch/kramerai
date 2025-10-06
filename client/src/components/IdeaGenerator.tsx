@@ -3,6 +3,7 @@ import { Sparkles, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FilterChip } from "./FilterChip";
 import { IdeaCard, type IdeaCardProps } from "./IdeaCard";
+import { useToast } from "@/hooks/use-toast";
 
 const industries = ["Teknoloji", "Yiyecek & İçecek", "Moda", "Sağlık", "Eğitim", "Eğlence"];
 const budgets = ["Düşük Bütçe", "Orta Bütçe", "Yüksek Bütçe"];
@@ -16,6 +17,7 @@ export function IdeaGenerator() {
   const [selectedAudience, setSelectedAudience] = useState<string | null>(null);
   const [ideas, setIdeas] = useState<IdeaCardProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   const clearFilters = () => {
     setSelectedIndustry(null);
@@ -43,19 +45,40 @@ export function IdeaGenerator() {
       });
 
       if (!response.ok) {
-        throw new Error("Fikirler üretilirken bir hata oluştu");
+        const data = await response.json();
+        throw new Error(data.error || "Fikirler üretilirken bir hata oluştu");
       }
 
       const data = await response.json();
       
       if (data.error) {
-        console.error("API error:", data.error);
+        toast({
+          title: "Hata",
+          description: data.error,
+          variant: "destructive",
+        });
         setIdeas([]);
+      } else if (data.ideas && data.ideas.length > 0) {
+        setIdeas(data.ideas);
+        toast({
+          title: "Başarılı!",
+          description: `${data.ideas.length} yaratıcı fikir üretildi`,
+        });
       } else {
-        setIdeas(data.ideas || []);
+        toast({
+          title: "Uyarı",
+          description: "Fikir üretilemedi, lütfen tekrar deneyin",
+          variant: "destructive",
+        });
+        setIdeas([]);
       }
     } catch (error) {
       console.error("Error generating ideas:", error);
+      toast({
+        title: "Hata",
+        description: error instanceof Error ? error.message : "Fikirler üretilirken bir hata oluştu",
+        variant: "destructive",
+      });
       setIdeas([]);
     } finally {
       setIsLoading(false);
