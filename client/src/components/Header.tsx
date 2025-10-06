@@ -50,7 +50,7 @@ export function Header() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <button 
           onClick={scrollToTop}
-          className="flex items-center gap-3 hover-elevate rounded-lg px-3 py-2 transition-all"
+          className="flex items-center gap-3 hover-elevate rounded-lg px-3 py-2 transition-all mr-4"
           data-testid="button-logo"
         >
           <div className="relative flex-shrink-0">
@@ -62,7 +62,7 @@ export function Header() {
           </div>
         </button>
 
-        <nav className="hidden md:flex items-center gap-1">
+        <nav className="hidden md:flex items-center gap-1 ml-auto mr-2">
           {navItems.map((item) => {
             const Icon = item.icon;
             return (
