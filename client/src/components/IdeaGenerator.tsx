@@ -305,17 +305,17 @@ export function IdeaGenerator() {
               size="lg"
               onClick={generateIdeas}
               disabled={isLoading}
-              className="w-full sm:w-auto text-xl px-16 py-8 shadow-2xl hover:shadow-primary/50 transition-all font-bold bg-gradient-to-r from-primary to-destructive hover:from-primary/90 hover:to-destructive/90"
+              className="w-full sm:w-auto px-8"
               data-testid="button-generate-ideas"
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="h-6 w-6 mr-3 animate-spin" />
+                  <Loader2 className="h-5 w-5 mr-2 animate-spin" />
                   Kramer Gibi Düşünüyor...
                 </>
               ) : (
                 <>
-                  <Sparkles className="h-6 w-6 mr-3" />
+                  <Sparkles className="h-5 w-5 mr-2" />
                   Fikirler Üret
                 </>
               )}
@@ -325,7 +325,7 @@ export function IdeaGenerator() {
               variant="secondary"
               onClick={generateRandomIdea}
               disabled={isLoading}
-              className="w-full sm:w-auto text-lg px-10 py-8 shadow-xl hover:shadow-chart-3/50 transition-all font-bold bg-gradient-to-r from-chart-3/80 to-chart-4/80 hover:from-chart-3 hover:to-chart-4"
+              className="w-full sm:w-auto px-8"
               data-testid="button-random-idea"
             >
               {isLoading ? (
@@ -341,10 +341,11 @@ export function IdeaGenerator() {
               )}
             </Button>
             <Button
+              size="lg"
               variant="outline"
               onClick={clearFilters}
               disabled={isLoading}
-              className="hover-elevate text-base px-6"
+              className="w-full sm:w-auto px-8"
               data-testid="button-clear-filters"
             >
               Filtreleri Temizle
