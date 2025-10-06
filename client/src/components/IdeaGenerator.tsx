@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Sparkles, Loader2, RefreshCw, Dices, Briefcase, Wallet, Gauge, Users } from "lucide-react";
+import { Sparkles, Loader2, RefreshCw, Dices, Briefcase, Wallet, Gauge, Users, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FilterChip } from "./FilterChip";
 import { IdeaCard, type IdeaCardProps } from "./IdeaCard";
 import { useToast } from "@/hooks/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent } from "@/components/ui/card";
 
 const industries = [
   "Teknoloji",
@@ -357,7 +359,83 @@ export function IdeaGenerator() {
           </div>
         </div>
 
-        {ideas.length > 0 && (
+        {isLoading && (
+          <div className="space-y-8">
+            <div className="text-center">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4 border border-primary/20">
+                <Loader2 className="h-4 w-4 text-primary animate-spin" />
+                <span className="text-sm font-semibold">Kramer Düşünüyor...</span>
+              </div>
+              <h3 className="font-serif text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                Fikirler Üretiliyor
+              </h3>
+              <p className="text-lg text-muted-foreground">
+                Yaratıcı fikirler hazırlanıyor, lütfen bekleyin
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3].map((i) => (
+                <Card key={i} className="overflow-hidden hover-elevate active-elevate-2 transition-all" data-testid={`skeleton-card-${i}`}>
+                  <CardContent className="p-6 space-y-4">
+                    <Skeleton className="h-8 w-3/4" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-5/6" />
+                    <div className="flex gap-2 pt-2">
+                      <Skeleton className="h-6 w-20" />
+                      <Skeleton className="h-6 w-24" />
+                    </div>
+                    <Skeleton className="h-10 w-full mt-4" />
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {!isLoading && ideas.length === 0 && (
+          <div className="max-w-3xl mx-auto">
+            <Card className="overflow-hidden border-2 border-primary/30 shadow-2xl">
+              <CardContent className="p-12 text-center space-y-6">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-destructive/20 blur-3xl" />
+                  <Lightbulb className="h-24 w-24 text-primary mx-auto relative animate-pulse" />
+                </div>
+                <h3 className="font-serif text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-destructive to-primary bg-clip-text text-transparent">
+                  Hoş Geldiniz!
+                </h3>
+                <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+                  Kramer tarzı <span className="text-foreground font-bold">yaratıcı girişim fikirleri</span> üretmeye hazır mısınız? 
+                  Yukarıdaki filtreleri kullanarak ihtiyaçlarınıza özel fikirler üretin veya 
+                  <span className="text-primary font-bold"> "Şansımı Dene"</span> butonuna basarak tamamen rastgele fikirler keşfedin!
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+                  <Button
+                    size="lg"
+                    onClick={generateIdeas}
+                    className="text-lg px-10 py-6 shadow-xl"
+                    data-testid="button-welcome-generate"
+                  >
+                    <Sparkles className="h-5 w-5 mr-2" />
+                    İlk Fikirlerimi Üret
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="secondary"
+                    onClick={generateRandomIdea}
+                    className="text-lg px-10 py-6 shadow-xl"
+                    data-testid="button-welcome-random"
+                  >
+                    <Dices className="h-5 w-5 mr-2" />
+                    Şansımı Dene
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {!isLoading && ideas.length > 0 && (
           <div className="space-y-8">
             <div className="text-center">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4 border border-primary/20">
