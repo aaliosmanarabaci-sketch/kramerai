@@ -10,13 +10,26 @@ import { IdeaDetailModal } from "./IdeaDetailModal";
 export type IdeaCardProps = Idea;
 
 const categoryColors: Record<string, string> = {
-  "Teknoloji": "border-l-chart-1",
-  "Yiyecek & İçecek": "border-l-chart-2",
-  "Moda": "border-l-chart-3",
-  "Sağlık": "border-l-chart-4",
-  "Eğitim": "border-l-chart-5",
-  "Eğlence": "border-l-primary",
-  "default": "border-l-muted",
+  "Teknoloji": "border-l-chart-1 shadow-md",
+  "Yiyecek & İçecek": "border-l-chart-2 shadow-md",
+  "Moda": "border-l-chart-3 shadow-md",
+  "Sağlık": "border-l-chart-4 shadow-md",
+  "Eğitim": "border-l-chart-5 shadow-md",
+  "Eğlence": "border-l-primary shadow-md",
+  "Finans": "border-l-chart-1 shadow-md",
+  "Gayrimenkul": "border-l-chart-4 shadow-md",
+  "Turizm & Seyahat": "border-l-chart-3 shadow-md",
+  "Spor & Fitness": "border-l-chart-5 shadow-md",
+  "Sanat & Tasarım": "border-l-chart-3 shadow-md",
+  "Medya & İletişim": "border-l-chart-2 shadow-md",
+  "E-ticaret": "border-l-chart-1 shadow-md",
+  "Danışmanlık": "border-l-chart-5 shadow-md",
+  "Çevre & Sürdürülebilirlik": "border-l-chart-4 shadow-md",
+  "Oyun & Hobi": "border-l-primary shadow-md",
+  "Otomotiv": "border-l-chart-1 shadow-md",
+  "Evcil Hayvan": "border-l-chart-2 shadow-md",
+  "Kozmetik & Güzellik": "border-l-chart-3 shadow-md",
+  "default": "border-l-muted shadow-md",
 };
 
 export function IdeaCard(idea: IdeaCardProps) {

@@ -1,4 +1,4 @@
-import { Lightbulb, Github, Twitter, Linkedin } from "lucide-react";
+import { Zap, Github, Twitter, Linkedin, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -9,16 +9,24 @@ export function Footer() {
   };
 
   return (
-    <footer className="bg-muted/30 border-t py-12">
+    <footer className="bg-gradient-to-b from-muted/20 to-muted/40 border-t py-16">
       <div className="container mx-auto px-4 max-w-7xl">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <Lightbulb className="h-6 w-6 text-primary" />
-              <span className="font-serif text-xl font-bold">Kramer Ideas Tool</span>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="relative">
+                <div className="absolute inset-0 bg-primary/20 blur-lg rounded-full" />
+                <div className="relative bg-gradient-to-br from-primary to-destructive p-2 rounded-lg">
+                  <Zap className="h-5 w-5 text-primary-foreground" />
+                </div>
+              </div>
+              <div className="flex flex-col">
+                <span className="font-serif text-xl font-bold leading-none">KramerAI</span>
+                <span className="text-xs text-muted-foreground font-medium leading-none">Idea Generator</span>
+              </div>
             </div>
             <p className="text-muted-foreground leading-relaxed">
-              Cosmo Kramer'ın yaratıcı ruhundan ilham alarak, girişimcilere ve fikir arayanlara yapay zeka destekli çözümler sunuyoruz.
+              Cosmo Kramer'ın yaratıcı ruhundan ilham alarak, girişimcilere ve fikir arayanlara <span className="font-semibold text-foreground">yapay zeka destekli</span> çözümler sunuyoruz.
             </p>
           </div>
 
@@ -44,8 +52,14 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold text-lg mb-4">Kramer Sözleri</h3>
-            <p className="font-righteous text-xl text-primary/80 mb-2">"Giddy up!"</p>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 rounded-full mb-4 border border-primary/20">
+              <Sparkles className="h-3 w-3 text-primary" />
+              <h3 className="font-semibold text-sm">Kramer Sözleri</h3>
+            </div>
+            <div className="bg-card/50 backdrop-blur-sm rounded-xl p-4 mb-4 border">
+              <p className="text-xl font-serif font-semibold text-primary mb-1">"Giddy up!"</p>
+              <p className="text-xs text-muted-foreground">— COSMO KRAMER</p>
+            </div>
             <p className="text-sm text-muted-foreground mb-4">Haftalık ilham verici fikirler al</p>
             
             <form onSubmit={handleNewsletterSubmit} className="flex gap-2">
@@ -55,7 +69,7 @@ export function Footer() {
                 className="flex-1"
                 data-testid="input-newsletter-email"
               />
-              <Button type="submit" data-testid="button-newsletter-submit">
+              <Button type="submit" className="shadow-sm" data-testid="button-newsletter-submit">
                 Abone Ol
               </Button>
             </form>
@@ -63,18 +77,18 @@ export function Footer() {
         </div>
 
         <div className="pt-8 border-t flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-muted-foreground">
-            © 2024 Kramer Ideas Tool. Tüm hakları saklıdır.
+          <p className="text-sm text-muted-foreground font-medium">
+            © 2025 <span className="font-semibold text-foreground">KramerAI</span>. Tüm hakları saklıdır.
           </p>
           
           <div className="flex items-center gap-2">
-            <Button size="icon" variant="ghost" data-testid="button-social-github">
+            <Button size="icon" variant="ghost" className="hover-elevate" data-testid="button-social-github">
               <Github className="h-5 w-5" />
             </Button>
-            <Button size="icon" variant="ghost" data-testid="button-social-twitter">
+            <Button size="icon" variant="ghost" className="hover-elevate" data-testid="button-social-twitter">
               <Twitter className="h-5 w-5" />
             </Button>
-            <Button size="icon" variant="ghost" data-testid="button-social-linkedin">
+            <Button size="icon" variant="ghost" className="hover-elevate" data-testid="button-social-linkedin">
               <Linkedin className="h-5 w-5" />
             </Button>
           </div>
