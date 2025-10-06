@@ -142,7 +142,16 @@ Preferred communication style: Simple, everyday language.
 - Uniqueness rating (1-5 lightbulbs)
 - Category, budget, and complexity badges
 
-### 6. Responsive Design & Navigation
+### 6. Social Sharing Features
+- Share ideas via WhatsApp with formatted text
+- Share ideas via Telegram
+- Send ideas via Email with subject and body
+- Copy idea text to clipboard
+- Native Web Share API support for mobile devices
+- Popover menu with all sharing options
+- Toast notifications for each sharing action
+
+### 7. Responsive Design & Navigation
 - Mobile-first responsive layout
 - Sticky navbar with smooth scrolling
 - Desktop and mobile menu variants
@@ -158,6 +167,8 @@ Preferred communication style: Simple, everyday language.
 - Added SavedIdeasContext for global favorites management
 - Implemented PDF export with jspdf and html2canvas
 - Created print-friendly CSS styles
-- Added random idea generator feature
+- Added random idea generator feature ("Şansımı Dene")
 - Enhanced navbar with favorites badge counter
 - Created dedicated saved ideas page with empty states
+- Implemented social sharing features (WhatsApp, Telegram, Email, Copy to Clipboard)
+- Added native Web Share API support for mobile devices

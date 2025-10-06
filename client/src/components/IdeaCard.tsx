@@ -186,7 +186,7 @@ export function IdeaCard(idea: IdeaCardProps) {
               </PopoverTrigger>
               <PopoverContent className="w-56 p-2" align="start">
                 <div className="flex flex-col gap-1">
-                  {navigator.share && (
+                  {'share' in navigator && (
                     <Button
                       variant="ghost"
                       size="sm"
