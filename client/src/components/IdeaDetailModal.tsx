@@ -14,6 +14,7 @@ import type { Idea } from "@shared/schema";
 import { useRef } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { useToast } from "@/hooks/use-toast";
 
 interface IdeaDetailModalProps {
   idea: Idea | null;
@@ -23,6 +24,7 @@ interface IdeaDetailModalProps {
 
 export function IdeaDetailModal({ idea, isOpen, onClose }: IdeaDetailModalProps) {
   const contentRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
 
   if (!idea) return null;
 
@@ -38,6 +40,9 @@ export function IdeaDetailModal({ idea, isOpen, onClose }: IdeaDetailModalProps)
         scale: 2,
         useCORS: true,
         logging: false,
+        backgroundColor: "#ffffff",
+        windowWidth: contentRef.current.scrollWidth,
+        windowHeight: contentRef.current.scrollHeight,
       });
 
       const imgData = canvas.toDataURL("image/png");
@@ -47,25 +52,38 @@ export function IdeaDetailModal({ idea, isOpen, onClose }: IdeaDetailModalProps)
         format: "a4",
       });
 
-      const imgWidth = 210;
-      const pageHeight = 297;
+      const pdfWidth = 210;
+      const pdfHeight = 297;
+      const imgWidth = pdfWidth - 20;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      
       let heightLeft = imgHeight;
-      let position = 0;
+      let position = 10;
 
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
+      pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
+      heightLeft -= (pdfHeight - 20);
 
       while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
         pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+        position = -(imgHeight - heightLeft) + 10;
+        pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
+        heightLeft -= (pdfHeight - 20);
       }
 
-      pdf.save(`${idea.title.replace(/\s+/g, "_")}_KramerAI.pdf`);
+      const filename = `${idea.title.replace(/\s+/g, "_")}_KramerAI.pdf`;
+      pdf.save(filename);
+      
+      toast({
+        title: "PDF İndirildi",
+        description: `${filename} başarıyla kaydedildi`,
+      });
     } catch (error) {
       console.error("PDF oluşturma hatası:", error);
+      toast({
+        title: "PDF Hatası",
+        description: "PDF oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.",
+        variant: "destructive",
+      });
     }
   };
 
