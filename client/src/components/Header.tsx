@@ -1,19 +1,41 @@
-import { Lightbulb, Zap, Menu, X, Home, HelpCircle, Sparkles, Info } from "lucide-react";
+import { Lightbulb, Zap, Menu, X, Home, HelpCircle, Sparkles, Info, Heart } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
+import { useLocation } from "wouter";
+import { useSavedIdeas } from "@/contexts/SavedIdeasContext";
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [location, setLocation] = useLocation();
+  const { savedIdeas } = useSavedIdeas();
 
   const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    element?.scrollIntoView({ behavior: "smooth" });
+    if (location !== "/") {
+      setLocation("/");
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        element?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    } else {
+      const element = document.getElementById(id);
+      element?.scrollIntoView({ behavior: "smooth" });
+    }
     setIsMobileMenuOpen(false);
   };
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (location !== "/") {
+      setLocation("/");
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    setIsMobileMenuOpen(false);
+  };
+
+  const navigateToSaved = () => {
+    setLocation("/saved");
     setIsMobileMenuOpen(false);
   };
 
@@ -59,6 +81,20 @@ export function Header() {
               </Button>
             );
           })}
+          <Button
+            variant="ghost"
+            onClick={navigateToSaved}
+            className="hover-elevate gap-2 relative"
+            data-testid="nav-link-saved"
+          >
+            <Heart className="h-4 w-4" />
+            <span className="font-medium">Favoriler</span>
+            {savedIdeas.length > 0 && (
+              <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs">
+                {savedIdeas.length}
+              </Badge>
+            )}
+          </Button>
         </nav>
         
         <div className="flex items-center gap-3">
@@ -103,6 +139,20 @@ export function Header() {
                 </Button>
               );
             })}
+            <Button
+              variant="ghost"
+              onClick={navigateToSaved}
+              className="justify-start hover-elevate gap-3 h-12 relative"
+              data-testid="mobile-nav-link-saved"
+            >
+              <Heart className="h-5 w-5" />
+              <span className="font-medium text-base">Favoriler</span>
+              {savedIdeas.length > 0 && (
+                <Badge variant="destructive" className="ml-auto">
+                  {savedIdeas.length}
+                </Badge>
+              )}
+            </Button>
           </nav>
         </div>
       )}

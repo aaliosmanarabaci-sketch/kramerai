@@ -6,6 +6,8 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import type { Idea } from "@shared/schema";
 import { IdeaDetailModal } from "./IdeaDetailModal";
+import { useSavedIdeas } from "@/contexts/SavedIdeasContext";
+import { useToast } from "@/hooks/use-toast";
 
 export type IdeaCardProps = Idea;
 
@@ -33,12 +35,25 @@ const categoryColors: Record<string, string> = {
 };
 
 export function IdeaCard(idea: IdeaCardProps) {
-  const [isSaved, setIsSaved] = useState(false);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const { addIdea, removeIdea, isIdeaSaved } = useSavedIdeas();
+  const { toast } = useToast();
+  const isSaved = isIdeaSaved(idea.title);
 
   const handleSave = () => {
-    setIsSaved(!isSaved);
-    console.log(`Idea ${isSaved ? "unsaved" : "saved"}: ${idea.title}`);
+    if (isSaved) {
+      removeIdea(idea.title);
+      toast({
+        title: "Favorilerden Çıkarıldı",
+        description: `"${idea.title}" favorilerden kaldırıldı.`,
+      });
+    } else {
+      addIdea(idea);
+      toast({
+        title: "Favorilere Eklendi",
+        description: `"${idea.title}" favorilere kaydedildi.`,
+      });
+    }
   };
 
   const handleShare = () => {
