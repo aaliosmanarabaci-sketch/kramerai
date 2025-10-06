@@ -223,6 +223,7 @@ export function IdeaDetailModal({ idea, isOpen, onClose }: IdeaDetailModalProps)
           <div className="hidden print:block mt-8 pt-4 border-t text-center text-sm text-gray-500">
             <p>Bu rapor KramerAI tarafından oluşturulmuştur - {new Date().toLocaleDateString("tr-TR")}</p>
           </div>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
