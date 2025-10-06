@@ -13,12 +13,9 @@ export function Footer() {
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
           <div>
-            <div className="flex items-center gap-3 mb-6">
-              <div className="relative">
-                <div className="absolute inset-0 bg-primary/20 blur-lg rounded-full" />
-                <div className="relative bg-gradient-to-br from-primary to-destructive p-2 rounded-lg">
-                  <Zap className="h-5 w-5 text-primary-foreground" />
-                </div>
+            <div className="flex items-center gap-2 mb-6">
+              <div className="relative flex-shrink-0">
+                <img src="/kramer-logo.png" alt="Kramer" className="h-10 w-10 rounded-lg object-cover ring-2 ring-primary/30" />
               </div>
               <div className="flex flex-col">
                 <span className="font-serif text-xl font-bold leading-none">KramerAI</span>

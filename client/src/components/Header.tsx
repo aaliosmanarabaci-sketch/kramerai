@@ -50,7 +50,7 @@ export function Header() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <button 
           onClick={scrollToTop}
-          className="flex items-center gap-3 hover-elevate rounded-lg px-3 py-2 transition-all mr-4"
+          className="flex items-center gap-2 hover-elevate rounded-lg px-3 py-2 transition-all mr-4"
           data-testid="button-logo"
         >
           <div className="relative flex-shrink-0">
