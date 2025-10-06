@@ -5,10 +5,57 @@ import { FilterChip } from "./FilterChip";
 import { IdeaCard, type IdeaCardProps } from "./IdeaCard";
 import { useToast } from "@/hooks/use-toast";
 
-const industries = ["Teknoloji", "Yiyecek & İçecek", "Moda", "Sağlık", "Eğitim", "Eğlence"];
-const budgets = ["Düşük Bütçe", "Orta Bütçe", "Yüksek Bütçe"];
-const complexities = ["Basit", "Orta", "Karmaşık"];
-const audiences = ["B2B", "B2C", "Niş Pazar"];
+const industries = [
+  "Teknoloji",
+  "Yiyecek & İçecek",
+  "Moda",
+  "Sağlık",
+  "Eğitim",
+  "Eğlence",
+  "Finans",
+  "Gayrimenkul",
+  "Turizm & Seyahat",
+  "Spor & Fitness",
+  "Sanat & Tasarım",
+  "Medya & İletişim",
+  "E-ticaret",
+  "Danışmanlık",
+  "Çevre & Sürdürülebilirlik",
+  "Oyun & Hobi",
+  "Otomotiv",
+  "Evcil Hayvan",
+  "Kozmetik & Güzellik"
+];
+
+const budgets = [
+  "0-5.000₺",
+  "5.000-25.000₺",
+  "25.000-100.000₺",
+  "100.000-500.000₺",
+  "500.000₺+"
+];
+
+const complexities = [
+  "Çok Basit",
+  "Basit",
+  "Orta",
+  "Karmaşık",
+  "Çok Karmaşık"
+];
+
+const audiences = [
+  "B2B",
+  "B2C",
+  "B2B2C",
+  "Niş Pazar",
+  "Gençler (18-25)",
+  "Yetişkinler (25-45)",
+  "Emekliler (45+)",
+  "Aileler",
+  "Profesyoneller",
+  "Öğrenciler",
+  "Girişimciler"
+];
 
 export function IdeaGenerator() {
   const [selectedIndustry, setSelectedIndustry] = useState<string | null>(null);
