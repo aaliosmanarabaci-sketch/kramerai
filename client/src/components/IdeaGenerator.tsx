@@ -75,7 +75,6 @@ export function IdeaGenerator() {
     setSelectedBudget(null);
     setSelectedComplexity(null);
     setSelectedAudience(null);
-    console.log("Filters cleared");
   };
 
   const generateRandomIdea = async () => {
