@@ -241,26 +241,30 @@ export function IdeaDetailModal({ idea, isOpen, onClose }: IdeaDetailModalProps)
               <h3 className="font-semibold text-lg">Yol Haritası</h3>
             </div>
             <div className="space-y-4">
-              {idea.roadmap.map((phase, index) => (
-                <div key={index} className="relative pl-8 pb-4">
-                  <div className="absolute left-0 top-1.5 h-full w-0.5 bg-primary/20" />
-                  <div className="absolute left-[-4px] top-1.5 h-3 w-3 rounded-full bg-primary" />
-                  <div className="space-y-2">
-                    <div className="flex items-start justify-between gap-2 flex-wrap">
-                      <h4 className="font-semibold text-base">{phase.phase}</h4>
-                      <Badge variant="outline" className="text-xs">{phase.duration}</Badge>
+              {Array.isArray(idea.roadmap) && idea.roadmap.length > 0 ? (
+                idea.roadmap.map((phase, index) => (
+                  <div key={index} className="relative pl-8 pb-4">
+                    <div className="absolute left-0 top-1.5 h-full w-0.5 bg-primary/20" />
+                    <div className="absolute left-[-4px] top-1.5 h-3 w-3 rounded-full bg-primary" />
+                    <div className="space-y-2">
+                      <div className="flex items-start justify-between gap-2 flex-wrap">
+                        <h4 className="font-semibold text-base">{phase.phase}</h4>
+                        <Badge variant="outline" className="text-xs">{phase.duration}</Badge>
+                      </div>
+                      <ul className="space-y-1 text-sm text-muted-foreground">
+                        {Array.isArray(phase.tasks) && phase.tasks.map((task, taskIndex) => (
+                          <li key={taskIndex} className="flex items-start gap-2">
+                            <span className="text-primary mt-1">•</span>
+                            <span>{task}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                    <ul className="space-y-1 text-sm text-muted-foreground">
-                      {phase.tasks.map((task, taskIndex) => (
-                        <li key={taskIndex} className="flex items-start gap-2">
-                          <span className="text-primary mt-1">•</span>
-                          <span>{task}</span>
-                        </li>
-                      ))}
-                    </ul>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p className="text-sm text-muted-foreground">Yol haritası bilgisi mevcut değil.</p>
+              )}
             </div>
           </div>
 
@@ -273,12 +277,16 @@ export function IdeaDetailModal({ idea, isOpen, onClose }: IdeaDetailModalProps)
                 <h3 className="font-semibold">Artılar</h3>
               </div>
               <ul className="space-y-2">
-                {idea.pros.map((pro, index) => (
-                  <li key={index} className="flex items-start gap-2 text-sm">
-                    <span className="text-green-600 dark:text-green-400 mt-0.5">✓</span>
-                    <span>{pro}</span>
-                  </li>
-                ))}
+                {Array.isArray(idea.pros) && idea.pros.length > 0 ? (
+                  idea.pros.map((pro, index) => (
+                    <li key={index} className="flex items-start gap-2 text-sm">
+                      <span className="text-green-600 dark:text-green-400 mt-0.5">✓</span>
+                      <span>{pro}</span>
+                    </li>
+                  ))
+                ) : (
+                  <li className="text-sm text-muted-foreground">Artılar bilgisi mevcut değil.</li>
+                )}
               </ul>
             </div>
 
@@ -288,12 +296,16 @@ export function IdeaDetailModal({ idea, isOpen, onClose }: IdeaDetailModalProps)
                 <h3 className="font-semibold">Eksiler</h3>
               </div>
               <ul className="space-y-2">
-                {idea.cons.map((con, index) => (
-                  <li key={index} className="flex items-start gap-2 text-sm">
-                    <span className="text-red-600 dark:text-red-400 mt-0.5">✗</span>
-                    <span>{con}</span>
-                  </li>
-                ))}
+                {Array.isArray(idea.cons) && idea.cons.length > 0 ? (
+                  idea.cons.map((con, index) => (
+                    <li key={index} className="flex items-start gap-2 text-sm">
+                      <span className="text-red-600 dark:text-red-400 mt-0.5">✗</span>
+                      <span>{con}</span>
+                    </li>
+                  ))
+                ) : (
+                  <li className="text-sm text-muted-foreground">Eksiler bilgisi mevcut değil.</li>
+                )}
               </ul>
             </div>
           </div>
@@ -303,11 +315,15 @@ export function IdeaDetailModal({ idea, isOpen, onClose }: IdeaDetailModalProps)
           <div>
             <h3 className="font-semibold mb-3">Gerekli Beceriler</h3>
             <div className="flex flex-wrap gap-2">
-              {idea.requiredSkills.map((skill, index) => (
-                <Badge key={index} variant="secondary" className="text-sm">
-                  {skill}
-                </Badge>
-              ))}
+              {Array.isArray(idea.requiredSkills) && idea.requiredSkills.length > 0 ? (
+                idea.requiredSkills.map((skill, index) => (
+                  <Badge key={index} variant="secondary" className="text-sm">
+                    {skill}
+                  </Badge>
+                ))
+              ) : (
+                <p className="text-sm text-muted-foreground">Gerekli beceriler bilgisi mevcut değil.</p>
+              )}
             </div>
           </div>
 
