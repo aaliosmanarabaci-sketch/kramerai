@@ -179,10 +179,10 @@ export function IdeaGenerator() {
     let lastError: any = undefined;
     for (let attempt = 1; attempt <= attempts; attempt++) {
       try {
-        const res = await fetch("/api/generate-ideas", {
+        const res = await fetch("/api/generate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
+          body: JSON.stringify({ prompt: JSON.stringify(body) }),
         });
 
         if (!res.ok) {
