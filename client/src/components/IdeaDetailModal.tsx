@@ -221,7 +221,7 @@ export function IdeaDetailModal({ idea, isOpen, onClose }: IdeaDetailModalProps)
                 <TrendingUp className="h-5 w-5 text-primary" />
                 <h3 className="font-semibold">Potansiyel Gelir</h3>
               </div>
-              <p className="text-sm text-muted-foreground">{idea.potentialRevenue}</p>
+              <p className="text-sm text-muted-foreground">{idea.potentialIncome || "Gelir bilgisi mevcut değil"}</p>
             </div>
 
             <div className="bg-muted/50 rounded-lg p-4">
@@ -229,7 +229,7 @@ export function IdeaDetailModal({ idea, isOpen, onClose }: IdeaDetailModalProps)
                 <Users className="h-5 w-5 text-primary" />
                 <h3 className="font-semibold">Hedef Pazar</h3>
               </div>
-              <p className="text-sm text-muted-foreground">{idea.targetMarketSize}</p>
+              <p className="text-sm text-muted-foreground">{idea.targetMarket || "Pazar bilgisi mevcut değil"}</p>
             </div>
           </div>
 

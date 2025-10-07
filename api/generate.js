@@ -43,6 +43,7 @@ Her fikir şunları içermeli:
 - Net gelir modeli olmalı
 - Türkiye pazarına uygun olmalı
 - Özgünlük puanı 1-5 arası olmalı
+- Detaylı yol haritası, artılar, eksiler ve gerekli beceriler
 
 ÇOK ÖNEMLİ: Yanıtını SADECE aşağıdaki JSON formatında ver. Başka hiçbir metin ekleme:
 
@@ -55,7 +56,41 @@ Her fikir şunları içermeli:
       "budget": "${originalBody.budget || '5.000-25.000₺'}",
       "complexity": "${originalBody.complexity || 'Orta'}",
       "targetAudience": "${originalBody.audience || 'B2C'}",
-      "uniqueness": 4
+      "uniqueness": 4,
+      "potentialIncome": "Aylık 15.000-50.000₺ arası gelir potansiyeli",
+      "targetMarket": "Türkiye'deki orta gelirli aileler ve bireyler",
+      "roadmap": [
+        {
+          "phase": "1. Hazırlık Aşaması",
+          "duration": "1-2 ay",
+          "tasks": ["Pazar araştırması", "İş planı hazırlama", "Yasal izinler"]
+        },
+        {
+          "phase": "2. Başlangıç",
+          "duration": "2-3 ay", 
+          "tasks": ["Ofis kurulumu", "İlk müşteri bulma", "Hizmet testi"]
+        },
+        {
+          "phase": "3. Büyüme",
+          "duration": "6-12 ay",
+          "tasks": ["Ekip genişletme", "Hizmet çeşitlendirme", "Pazarlama"]
+        }
+      ],
+      "pros": [
+        "Düşük başlangıç maliyeti",
+        "Yüksek talep potansiyeli",
+        "Ölçeklenebilir iş modeli"
+      ],
+      "cons": [
+        "Yoğun rekabet",
+        "Müşteri güveni kazanma süreci",
+        "İlk aylarda düşük gelir"
+      ],
+      "requiredSkills": [
+        "İletişim becerileri",
+        "Proje yönetimi",
+        "Pazarlama bilgisi"
+      ]
     }
   ]
 }
