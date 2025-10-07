@@ -1,4 +1,4 @@
-import { Lightbulb, Zap, Menu, X, Home, HelpCircle, Sparkles, Info, Heart } from "lucide-react";
+import { Lightbulb, Zap, Menu, X, Home, Sparkles, Info, Heart } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -41,7 +41,6 @@ export function Header() {
 
   const navItems = [
     { label: "Ana Sayfa", icon: Home, action: () => scrollToTop() },
-    { label: "Nasıl Çalışır", icon: HelpCircle, action: () => scrollToSection("how-it-works") },
     { label: "Kramer Hakkında", icon: Info, action: () => scrollToSection("kramer-inspiration") },
   ];
 

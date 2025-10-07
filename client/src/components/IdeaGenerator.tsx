@@ -81,27 +81,16 @@ export function IdeaGenerator() {
     setIsLoading(true);
     
     try {
-      const response = await fetch("/api/generate-ideas", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          industry: null,
-          budget: null,
-          complexity: null,
-          audience: null,
-          creativityLevel: "wild",
-          ideaCount: 3,
-        }),
+      const response = await requestWithRetry({
+        industry: null,
+        budget: null,
+        complexity: null,
+        audience: null,
+        creativityLevel: "wild",
+        ideaCount: 3,
       });
 
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || "Fikirler üretilirken bir hata oluştu");
-      }
-
-      const data = await response.json();
+      const data = response;
       
       if (data.error) {
         toast({
@@ -141,27 +130,16 @@ export function IdeaGenerator() {
     setIsLoading(true);
     
     try {
-      const response = await fetch("/api/generate-ideas", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          industry: selectedIndustry,
-          budget: selectedBudget,
-          complexity: selectedComplexity,
-          audience: selectedAudience,
-          creativityLevel: "creative",
-          ideaCount: 3,
-        }),
+      const response = await requestWithRetry({
+        industry: selectedIndustry,
+        budget: selectedBudget,
+        complexity: selectedComplexity,
+        audience: selectedAudience,
+        creativityLevel: "creative",
+        ideaCount: 3,
       });
 
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || "Fikirler üretilirken bir hata oluştu");
-      }
-
-      const data = await response.json();
+      const data = response;
       
       if (data.error) {
         toast({
@@ -197,8 +175,50 @@ export function IdeaGenerator() {
     }
   };
 
+  async function requestWithRetry(body: Record<string, any>, attempts = 2, backoffMs = 1200): Promise<any> {
+    let lastError: any = undefined;
+    for (let attempt = 1; attempt <= attempts; attempt++) {
+      try {
+        const res = await fetch("/api/generate-ideas", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+
+        if (!res.ok) {
+          // try to parse server error
+          let serverMessage = "";
+          try {
+            const errData = await res.json();
+            serverMessage = errData?.error || errData?.message || "";
+          } catch (_) {
+            // ignore json parse errors
+          }
+
+          if (res.status === 429 || res.status === 503) {
+            if (attempt < attempts) {
+              await new Promise((r) => setTimeout(r, backoffMs));
+              continue;
+            }
+            throw new Error(serverMessage || (res.status === 429 ? "Çok fazla istek gönderildi. Lütfen kısa bir süre sonra tekrar deneyin." : "Gemini AI şu anda çok yoğun. Lütfen biraz sonra tekrar deneyin."));
+          }
+
+          throw new Error(serverMessage || "Fikirler üretilirken bir hata oluştu");
+        }
+
+        const data = await res.json();
+        return data;
+      } catch (err) {
+        lastError = err;
+        if (attempt === attempts) break;
+        await new Promise((r) => setTimeout(r, backoffMs));
+      }
+    }
+    throw (lastError instanceof Error ? lastError : new Error("Fikirler üretilirken bir hata oluştu"));
+  }
+
   return (
-    <section id="generator" className="py-24 bg-gradient-to-b from-background via-muted/20 to-background relative overflow-hidden">
+    <section id="generator" className="py-12 bg-gradient-to-b from-background via-muted/20 to-background relative overflow-hidden">
       <div className="absolute inset-0 opacity-[0.03]">
         <div className="absolute top-20 left-10 w-96 h-96 rounded-full bg-primary blur-3xl animate-pulse" />
         <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-destructive blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }} />
@@ -358,6 +378,39 @@ export function IdeaGenerator() {
               Filtreleri Temizle
             </Button>
           </div>
+
+          {/* Kullanım Rehberi */}
+          <div className="bg-gradient-to-r from-muted/30 to-muted/20 rounded-2xl p-6 mt-8 border">
+            <h4 className="text-lg font-semibold text-center mb-4 text-foreground">
+              💡 Nasıl Kullanılır?
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+              <div className="flex items-center gap-3 justify-center">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                  <span className="text-primary font-bold text-sm">1</span>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  <span className="text-foreground font-semibold">Filtreleri seçin</span> (sektör, bütçe, karmaşıklık, hedef kitle)
+                </p>
+              </div>
+              <div className="flex items-center gap-3 justify-center">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                  <span className="text-primary font-bold text-sm">2</span>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  <span className="text-primary font-semibold">"Fikirler Üret"</span> veya <span className="text-primary font-semibold">"Şansımı Dene"</span> butonuna basın
+                </p>
+              </div>
+              <div className="flex items-center gap-3 justify-center">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                  <span className="text-primary font-bold text-sm">3</span>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  <span className="text-foreground font-semibold">Kramer tarzı yaratıcı fikirler</span> hazır!
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {isLoading && (
@@ -391,51 +444,6 @@ export function IdeaGenerator() {
                 </Card>
               ))}
             </div>
-          </div>
-        )}
-
-        {!isLoading && ideas.length === 0 && (
-          <div className="max-w-3xl mx-auto">
-            <Card className="overflow-hidden border-2 border-primary/30 shadow-2xl">
-              <CardContent className="p-12 text-center space-y-6">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-destructive/20 blur-3xl" />
-                  <Lightbulb className="h-24 w-24 text-primary mx-auto relative animate-pulse" />
-                </div>
-                <h3 className="font-serif text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-destructive to-primary bg-clip-text text-transparent">
-                  Hoş Geldiniz!
-                </h3>
-                <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-                  Kramer tarzı <span className="text-foreground font-bold">yaratıcı girişim fikirleri</span> üretmeye hazır mısınız?
-                </p>
-                <div className="space-y-4 pt-2">
-                  <div className="flex items-center gap-3 text-left max-w-xl mx-auto">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-                      <span className="text-primary font-bold">1</span>
-                    </div>
-                    <p className="text-base text-muted-foreground">
-                      Yukarıdaki <span className="text-foreground font-semibold">filtreleri seçin</span> (sektör, bütçe, karmaşıklık, hedef kitle)
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-3 text-left max-w-xl mx-auto">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-                      <span className="text-primary font-bold">2</span>
-                    </div>
-                    <p className="text-base text-muted-foreground">
-                      <span className="text-primary font-semibold">"Fikirler Üret"</span> butonuna basın veya <span className="text-primary font-semibold">"Şansımı Dene"</span> ile rastgele fikirler keşfedin
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-3 text-left max-w-xl mx-auto">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-                      <span className="text-primary font-bold">3</span>
-                    </div>
-                    <p className="text-base text-muted-foreground">
-                      Kramer tarzı <span className="text-foreground font-semibold">yaratıcı fikirler</span> hazır olacak!
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         )}
 

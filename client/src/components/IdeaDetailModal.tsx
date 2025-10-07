@@ -33,9 +33,24 @@ export function IdeaDetailModal({ idea, isOpen, onClose }: IdeaDetailModalProps)
   };
 
   const handleDownloadPDF = async () => {
-    if (!contentRef.current) return;
+    if (!contentRef.current) {
+      toast({
+        title: "PDF Hatası",
+        description: "İçerik hazırlanıyor, lütfen tekrar deneyin.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: "PDF Oluşturuluyor",
+      description: "Lütfen bekleyin...",
+    });
 
     try {
+      // Scroll pozisyonunu kaydet
+      const scrollY = window.scrollY;
+
       const canvas = await html2canvas(contentRef.current, {
         scale: 2,
         useCORS: true,
@@ -43,7 +58,65 @@ export function IdeaDetailModal({ idea, isOpen, onClose }: IdeaDetailModalProps)
         backgroundColor: "#ffffff",
         windowWidth: contentRef.current.scrollWidth,
         windowHeight: contentRef.current.scrollHeight,
+        scrollX: 0,
+        scrollY: 0,
+        width: contentRef.current.scrollWidth,
+        height: contentRef.current.scrollHeight,
+        onclone: (clonedDoc) => {
+          // Tüm stylesheet'leri kaldır
+          const styleSheets = clonedDoc.querySelectorAll('style, link[rel="stylesheet"]');
+          styleSheets.forEach(sheet => sheet.remove());
+          
+          // Tüm elementlerin stillerini computed values'a dönüştür
+          const allElements = clonedDoc.querySelectorAll('*');
+          allElements.forEach((el: Element) => {
+            if (el instanceof HTMLElement) {
+              try {
+                const computedStyle = window.getComputedStyle(el);
+                
+                // Class'ları temizle (Tailwind CSS'den kaçınmak için)
+                el.removeAttribute('class');
+                el.removeAttribute('style');
+                
+                // Sadece önemli computed stilleri inline olarak ekle
+                const cssText = [
+                  computedStyle.backgroundColor && computedStyle.backgroundColor !== 'rgba(0, 0, 0, 0)' 
+                    ? `background-color: ${computedStyle.backgroundColor} !important` : '',
+                  computedStyle.color ? `color: ${computedStyle.color} !important` : '',
+                  computedStyle.fontSize ? `font-size: ${computedStyle.fontSize} !important` : '',
+                  computedStyle.fontWeight ? `font-weight: ${computedStyle.fontWeight} !important` : '',
+                  computedStyle.fontFamily ? `font-family: ${computedStyle.fontFamily} !important` : '',
+                  computedStyle.padding ? `padding: ${computedStyle.padding} !important` : '',
+                  computedStyle.margin ? `margin: ${computedStyle.margin} !important` : '',
+                  computedStyle.borderRadius ? `border-radius: ${computedStyle.borderRadius} !important` : '',
+                  computedStyle.borderWidth ? `border-width: ${computedStyle.borderWidth} !important` : '',
+                  computedStyle.borderStyle ? `border-style: ${computedStyle.borderStyle} !important` : '',
+                  computedStyle.borderColor ? `border-color: ${computedStyle.borderColor} !important` : '',
+                  computedStyle.display ? `display: ${computedStyle.display} !important` : '',
+                  computedStyle.flexDirection ? `flex-direction: ${computedStyle.flexDirection} !important` : '',
+                  computedStyle.alignItems ? `align-items: ${computedStyle.alignItems} !important` : '',
+                  computedStyle.justifyContent ? `justify-content: ${computedStyle.justifyContent} !important` : '',
+                  computedStyle.gap ? `gap: ${computedStyle.gap} !important` : '',
+                  computedStyle.width ? `width: ${computedStyle.width} !important` : '',
+                  computedStyle.height ? `height: ${computedStyle.height} !important` : '',
+                  computedStyle.textAlign ? `text-align: ${computedStyle.textAlign} !important` : '',
+                  computedStyle.lineHeight ? `line-height: ${computedStyle.lineHeight} !important` : '',
+                  computedStyle.position ? `position: ${computedStyle.position} !important` : '',
+                ].filter(s => s).join('; ');
+                
+                if (cssText) {
+                  el.setAttribute('style', cssText);
+                }
+              } catch (e) {
+                // Stil hesaplanamayan elementleri sessizce atla
+              }
+            }
+          });
+        },
       });
+
+      // Scroll pozisyonunu geri yükle
+      window.scrollTo(0, scrollY);
 
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF({
@@ -70,18 +143,18 @@ export function IdeaDetailModal({ idea, isOpen, onClose }: IdeaDetailModalProps)
         heightLeft -= (pdfHeight - 20);
       }
 
-      const filename = `${idea.title.replace(/\s+/g, "_")}_KramerAI.pdf`;
+      const filename = `${idea.title.replace(/[^a-zA-Z0-9_]/g, "_")}_KramerAI.pdf`;
       pdf.save(filename);
       
       toast({
-        title: "PDF İndirildi",
-        description: `${filename} başarıyla kaydedildi`,
+        title: "✅ PDF İndirildi",
+        description: `"${idea.title}" başarıyla kaydedildi`,
       });
     } catch (error) {
       console.error("PDF oluşturma hatası:", error);
       toast({
         title: "PDF Hatası",
-        description: "PDF oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.",
+        description: error instanceof Error ? error.message : "PDF oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.",
         variant: "destructive",
       });
     }

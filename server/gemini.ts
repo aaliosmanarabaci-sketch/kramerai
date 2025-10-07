@@ -217,20 +217,22 @@ export async function generateIdeas(request: GenerateIdeasRequest): Promise<Idea
     return ideas;
   } catch (error: any) {
     console.error("Gemini API error:", error);
-    
-    // Check for Gemini API specific error structure
-    if (error?.error?.code) {
-      const errorCode = error.error.code;
-      
-      if (errorCode === 503) {
-        throw new Error("Gemini AI şu anda çok yoğun. Lütfen birkaç saniye sonra tekrar deneyin.");
-      }
-      
-      if (errorCode === 429) {
-        throw new Error("Çok fazla istek gönderildi. Lütfen 30 saniye bekleyip tekrar deneyin.");
-      }
+
+    // Normalize common error shapes thrown by @google/genai
+    const statusCode =
+      error?.status ||
+      error?.code ||
+      error?.error?.status ||
+      error?.error?.code;
+
+    if (statusCode === 503) {
+      throw new Error("Gemini AI şu anda çok yoğun. Lütfen birkaç saniye sonra tekrar deneyin.");
     }
-    
+
+    if (statusCode === 429) {
+      throw new Error("Çok fazla istek gönderildi. Lütfen 30 saniye bekleyip tekrar deneyin.");
+    }
+
     throw new Error("Fikirler üretilirken bir hata oluştu. Lütfen tekrar deneyin.");
   }
 }

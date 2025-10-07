@@ -31,13 +31,8 @@ export function Footer() {
             <h3 className="font-semibold text-lg mb-4">Hızlı Bağlantılar</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Hakkımızda
-                </a>
-              </li>
-              <li>
-                <a href="#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Nasıl Çalışır
+                <a href="#kramer-inspiration" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Kramer Hakkında
                 </a>
               </li>
               <li>

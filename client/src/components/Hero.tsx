@@ -9,7 +9,7 @@ export function Hero() {
   };
 
   return (
-    <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-destructive/10" />
       
       <div className="absolute inset-0 opacity-[0.07]">
