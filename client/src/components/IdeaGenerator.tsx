@@ -128,6 +128,7 @@ export function IdeaGenerator() {
 
   const generateIdeas = async () => {
     setIsLoading(true);
+    setIdeas([]); // Clear previous ideas
     
     try {
       const response = await requestWithRetry({
@@ -140,21 +141,25 @@ export function IdeaGenerator() {
       });
 
       const data = response;
+      console.log("API Response:", data); // Debug log
       
       if (data.error) {
+        console.error("API Error:", data.error, data.details);
         toast({
           title: "Hata",
           description: data.error,
           variant: "destructive",
         });
         setIdeas([]);
-      } else if (data.ideas && data.ideas.length > 0) {
+      } else if (data.ideas && Array.isArray(data.ideas) && data.ideas.length > 0) {
+        console.log("Setting ideas:", data.ideas); // Debug log
         setIdeas(data.ideas);
         toast({
           title: "Başarılı!",
           description: `${data.ideas.length} yaratıcı fikir üretildi`,
         });
       } else {
+        console.warn("No ideas in response:", data);
         toast({
           title: "Uyarı",
           description: "Fikir üretilemedi, lütfen tekrar deneyin",
@@ -458,12 +463,12 @@ export function IdeaGenerator() {
                 Senin İçin Üretildi
               </h3>
               <p className="text-lg text-muted-foreground">
-                <span className="font-bold text-primary">{ideas.length}</span> yaratıcı fikir bulundu
+                <span className="font-bold text-primary">{Array.isArray(ideas) ? ideas.length : 0}</span> yaratıcı fikir bulundu
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {ideas.map((idea, index) => (
+              {Array.isArray(ideas) && ideas.map((idea, index) => (
                 <IdeaCard key={index} {...idea} />
               ))}
             </div>
