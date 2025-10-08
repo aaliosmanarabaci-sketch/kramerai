@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { SavedIdeasProvider } from "@/contexts/SavedIdeasContext";
+import { Analytics } from '@vercel/analytics/react';
 import Home from "@/pages/Home";
 import SavedIdeas from "@/pages/SavedIdeas";
 import NotFound from "@/pages/not-found";
@@ -27,6 +28,8 @@ function App() {
           <TooltipProvider>
             <Toaster />
             <Router />
+            {/* Analytics component - en alta */}
+            <Analytics />
           </TooltipProvider>
         </SavedIdeasProvider>
       </ThemeProvider>
