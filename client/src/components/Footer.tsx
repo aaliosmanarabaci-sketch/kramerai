@@ -54,16 +54,27 @@ export function Footer() {
             </div>
             <p className="text-sm text-muted-foreground mb-4">Haftalık ilham verici fikirler al</p>
             
-            <form onSubmit={handleNewsletterSubmit} className="flex gap-2">
-              <Input
+            <form
+              action="https://app.us20.list-manage.com/subscribe/post?u=093799661af66a7874f64bd51&amp;id=7a1c4ab2e5&amp;f_id=00fb76eef0"
+              method="post"
+              target="_blank"
+              className="flex gap-2"
+            >
+              <input
                 type="email"
+                name="EMAIL"
+                required
                 placeholder="E-posta adresin"
-                className="flex-1"
+                className="flex-1 border border-border rounded-lg p-2 text-foreground bg-background focus:outline-none focus:ring-2 focus:ring-primary"
                 data-testid="input-newsletter-email"
               />
-              <Button type="submit" className="shadow-sm" data-testid="button-newsletter-submit">
+              <button
+                type="submit"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-4 py-2 rounded-lg transition shadow-sm"
+                data-testid="button-newsletter-submit"
+              >
                 Abone Ol
-              </Button>
+              </button>
             </form>
           </div>
         </div>
