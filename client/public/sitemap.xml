@@ -3,13 +3,11 @@
   <url>
     <loc>https://www.kramerai.app/</loc>
     <lastmod>2025-10-08</lastmod>
-    <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.kramerai.app/saved</loc>
     <lastmod>2025-10-08</lastmod>
-    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 </urlset>
